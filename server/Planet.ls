@@ -2,6 +2,7 @@ require! {
   \./MetalMine
   \./CrystalMine
   \./DeutMine
+  \./SolarPlant
 }
 
 class Planet extends  N \planet N.Route.Collection, schema: \strict
@@ -18,6 +19,8 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict
         if price.deut
           return @Deutmine.Set amount: @Deutmine.amount - price.deut
         @
+  _AvailableEnergy: ->
+    @Solarplant.energy - @Metalmine.consumption - @Crystalmine.consumption - @Deutmine.consumption
 
 Planet
   ..Field \position \string
@@ -28,9 +31,11 @@ Planet
     metal:   it.Metalmine?.amount || 0
     crystal: it.Crystalmine?.amount || 0
     deut:    it.Deutmine?.amount || 0
+    energy:  it._AvailableEnergy! || 0
 
   ..HasOne MetalMine
   ..HasOne CrystalMine
   ..HasOne DeutMine
+  ..HasOne SolarPlant
 
 module.exports = Planet

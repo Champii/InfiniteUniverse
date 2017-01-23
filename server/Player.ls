@@ -3,6 +3,7 @@ require! {
   \./MetalMine
   \./CrystalMine
   \./DeutMine
+  \./SolarPlant
 }
 
 Player = N \player N.Route.Collection, schema: \strict , maxDepth: 2
@@ -27,6 +28,10 @@ Player.Watch \new (player) ->
     .Catch console.error
 
   DeutMine
+    .Create planetId: planet
+    .Catch console.error
+
+  SolarPlant
     .Create planetId: planet
     .Catch console.error
 
