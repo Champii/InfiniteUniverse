@@ -1,0 +1,36 @@
+:host {
+  .building {
+    /deep/ {
+      .ui-widget-header {
+        text-transform: capitalize;
+      }
+      .ui-widget-content {
+        position: relative;
+        .building-icon {
+          height: 100px;
+          width: 100px;
+          position: relative;
+          div {
+            width: 100%;
+            height: 100%;
+            left: -50%;
+            margin-left: 50%;
+            background: url('/assets/img/miners/miners.png') 0 0 no-repeat;
+            &.metal {
+              background-position: -100px 0;
+            }
+          }
+        }
+        .building-detail {}
+        // .building-level {
+        //   position: absolute;
+        //   width: 100%;
+        //   left: 0;
+        //   bottom: 36px;
+        //   color: yellow;
+        //   background-color: #051825;
+        // }
+      }
+    }
+  }
+}

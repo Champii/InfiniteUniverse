@@ -1,0 +1,19 @@
+<p-dataGrid [value]="buildings" [rows]="20">
+  <p-header> {{ header }} </p-header>
+  <template let-builging pTemplate="item">
+    <div style="padding:3px" class="building ui-g-12 ui-md-3" *ngFor="let building of buildings">
+      <p-panel [header]="building.name" [style]="{'text-align':'center'}">
+        <div class="building-icon col-xs-12">
+          <div [class]="setIcon(building.icon)"></div>
+        </div>
+        <div class="building-detail">
+          <div class="building-lvl">
+            lvl {{ building.level }}
+            <i class="fa fa-arrow-circle-up" (click)="selectCar(car)" style="cursor:pointer"></i>
+          </div>
+        </div>
+
+      </p-panel>
+    </div>
+  </template>
+</p-dataGrid>
