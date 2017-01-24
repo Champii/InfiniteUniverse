@@ -19,6 +19,7 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict
         if price.deut
           return @Deutmine.Set amount: @Deutmine.amount - price.deut
         @
+
   _AvailableEnergy: ->
     @Solarplant.energy - @Metalmine.consumption - @Crystalmine.consumption - @Deutmine.consumption
 

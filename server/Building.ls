@@ -7,6 +7,7 @@ class BuildingRoute extends N.Route.Collection
   Config: ->
     super!
     @Put \/:id/levelup (.instance.LevelUp!)
+    @Get -> null
 
 class Building extends N \building, BuildingRoute, abstract: true
 
@@ -30,6 +31,7 @@ class Building extends N \building, BuildingRoute, abstract: true
 Building
   ..Field \level          \int .Default 0
   ..Field \buildingFinish \int .Default 0
+  ..Field \consumption    \int .Default 0
 
 module.exports = Building
 
