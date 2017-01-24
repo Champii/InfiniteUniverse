@@ -27,6 +27,8 @@ class Building extends N \building, BuildingRoute, abstract: true
   _BuildingTime: ->
     price = @_Price @level
     Math.floor (price.metal * price.crystal) / (2500 * (1 + 0roboticLevel) * 100universeSpeed * 2 ^ 0naniteLevel) * 3600
+    #
+    0
 
 Building
   ..Field \level          \int .Default 0

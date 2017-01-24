@@ -5,7 +5,7 @@ require! {
   \./SolarPlant
 }
 
-class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 2
+class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
 
   Buy: @_WrapResolvePromise (price) ->
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)

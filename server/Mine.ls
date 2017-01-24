@@ -45,7 +45,8 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true
       return 0
 
     if @Planet?.amount?.energy >= 0
-      return 1
+      return 1 * 100serverspeed
+
 
     1 - Math.floor (Math.abs(@Planet.amount.energy) / @Planet.Solarplant.energy)
 
