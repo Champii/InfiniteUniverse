@@ -5,7 +5,7 @@ require! {
   \./SolarPlant
 }
 
-class Planet extends  N \planet N.Route.Collection, schema: \strict
+class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 2
 
   Buy: @_WrapResolvePromise (price) ->
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
@@ -22,6 +22,15 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict
 
   _AvailableEnergy: ->
     @Solarplant.energy - @Metalmine.consumption - @Crystalmine.consumption - @Deutmine.consumption
+
+  ToJSON: ->
+    serie = super!
+    delete serie.Metalmine?.Planet
+    delete serie.Crystalmine?.Planet
+    delete serie.Deutmine?.Planet
+    delete serie.Solarplant?.Planet
+    delete serie.Player?.Planets
+    serie
 
 Planet
   ..Field \position \string
