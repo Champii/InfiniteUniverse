@@ -28,20 +28,20 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
     delete serie.Metalmine?.Planet
     delete serie.Crystalmine?.Planet
     delete serie.Deutmine?.Planet
-    delete serie.Solarplant?.Planet
+    # delete serie.Solarplant?.Planet
     delete serie.Player?.Planets
     serie
 
 Planet
   ..Field \position \string
   ..Field \amount   \obj    .Virtual ->
-    if not it.Metalmine?
+    if not @Metalmine?
       return
 
-    metal:   it.Metalmine?.amount || 0
-    crystal: it.Crystalmine?.amount || 0
-    deut:    it.Deutmine?.amount || 0
-    energy:  it._AvailableEnergy! || 0
+    metal:   @Metalmine?.amount || 0
+    crystal: @Crystalmine?.amount || 0
+    deut:    @Deutmine?.amount || 0
+    energy:  @_AvailableEnergy! || 0
 
   ..HasOne MetalMine
   ..HasOne CrystalMine

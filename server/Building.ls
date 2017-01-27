@@ -27,13 +27,16 @@ class Building extends N \building, BuildingRoute, abstract: true
   _BuildingTime: ->
     price = @_Price @level
     Math.floor (price.metal * price.crystal) / (2500 * (1 + 0roboticLevel) * 100universeSpeed * 2 ^ 0naniteLevel) * 3600
-    #
-    0
+    0 #tempDevValue
+
+  _Price: -> ...
+  _Production: -> ...
 
 Building
   ..Field \level          \int .Default 0
   ..Field \buildingFinish \int .Default 0
   ..Field \consumption    \int .Default 0
+  ..Field \price          \obj .Virtual -> @_Price @level
 
 module.exports = Building
 

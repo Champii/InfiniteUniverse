@@ -20,19 +20,19 @@ Player.Watch \new (player) ->
     .Catch console.error
 
   MetalMine
-    .Create planetId: planet
+    .Create planetId: planet, level: 20
     .Catch console.error
 
   CrystalMine
-    .Create planetId: planet
+    .Create planetId: planet, level: 20
     .Catch console.error
 
   DeutMine
-    .Create planetId: planet
+    .Create planetId: planet, level: 20
     .Catch console.error
 
   SolarPlant
-    .Create planetId: planet
+    .Create planetId: planet, level: 30
     .Catch console.error
 
 module.exports = Player
