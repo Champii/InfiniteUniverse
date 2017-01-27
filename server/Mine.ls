@@ -10,6 +10,9 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
       done = (err, instance) ~>
         return oldDone err if err?
 
+        if not instance.Planet?Solarplant?
+          return oldDone null, instance
+
         instance
           .Update!
           .Then -> oldDone null, it
@@ -19,7 +22,11 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
 
     else
       instance = super ...
-      instance.Fetch!Then -> it.Update!
+
+      if not instance.Planet?Solarplant?
+        return instance
+
+      instance.Then -> it.Update!
 
   Update: ->
     lapsedTime = (new Date - @lastUpdate) / 1000
@@ -31,34 +38,34 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
   ToJSON: ->
     serie = super!
     serie.amount      = Math.floor serie.amount
-    serie.production  = Math.floor serie.production
-    serie.consumption = Math.floor serie.consumption
     delete serie.Planet?.Metalmine
     delete serie.Planet?.Crystalmine
     delete serie.Planet?.Deutmine
-    # delete serie.Planet?.Solarplant
+    delete serie.Planet?.Solarplant
     delete serie.Planet?.Player
     serie
 
   _PercentProduction: ->
-    console.log @_type, @Planet
-    if not @Planet?.Solarplant? || @Planet.Solarplant?.energy is 0
+    if not @Planet?Solarplant?
+      return 0
+
+    if @Planet.Solarplant.energy is 0
       return 0
 
     if @Planet.amount.energy >= 0
       return 1
 
+    consumption = @Planet.Metalmine.consumption + @Planet.Crystalmine.consumption + @Planet.Deutmine.consumption
 
-    (1 - Math.floor (Math.abs(@Planet.amount.energy) / @Planet.Solarplant.energy))
-    # 1
+    @Planet.Solarplant.energy / consumption
 
   _Consumption: -> ...
 
 
 Mine
   ..Field \amount      \int  .Default 0
-  ..Field \production  \int  .Virtual -> @_Production @level
-  ..Field \consumption \int  .Virtual -> @_Consumption @level
+  ..Field \production  \int  .Virtual -> Math.floor @_Production @level
+  ..Field \consumption \int  .Virtual -> Math.floor @_Consumption @level
   ..Field \lastUpdate  \date .Default new Date
 
 module.exports = Mine

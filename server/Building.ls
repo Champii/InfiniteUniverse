@@ -35,8 +35,10 @@ class Building extends N \building, BuildingRoute, abstract: true
 Building
   ..Field \level          \int .Default 0
   ..Field \buildingFinish \int .Default 0
-  ..Field \consumption    \int .Default 0
-  ..Field \price          \obj .Virtual -> @_Price @level
+  ..Field \price          \obj .Virtual ->
+    amount = @_Price @level
+    metal: Math.floor amount.metal
+    crystal: Math.floor amount.crystal
 
 module.exports = Building
 

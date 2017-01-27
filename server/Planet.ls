@@ -28,7 +28,7 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
     delete serie.Metalmine?.Planet
     delete serie.Crystalmine?.Planet
     delete serie.Deutmine?.Planet
-    # delete serie.Solarplant?.Planet
+    delete serie.Solarplant?.Planet
     delete serie.Player?.Planets
     serie
 
@@ -38,10 +38,10 @@ Planet
     if not @Metalmine?
       return
 
-    metal:   @Metalmine?.amount || 0
-    crystal: @Crystalmine?.amount || 0
-    deut:    @Deutmine?.amount || 0
-    energy:  @_AvailableEnergy! || 0
+    metal:   Math.floor @Metalmine?.amount || 0
+    crystal: Math.floor @Crystalmine?.amount || 0
+    deut:    Math.floor @Deutmine?.amount || 0
+    energy:  Math.floor @_AvailableEnergy! || 0
 
   ..HasOne MetalMine
   ..HasOne CrystalMine

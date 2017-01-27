@@ -17,6 +17,6 @@ class SolarPlant extends Building.Extend \solarplant, Building.Route, schema: \s
     serie
 
 SolarPlant
-  ..Field \energy     \int  .Virtual -> @_Production @level
+  ..Field \energy     \int  .Virtual -> Math.floor @_Production @level
 
 module.exports = SolarPlant
