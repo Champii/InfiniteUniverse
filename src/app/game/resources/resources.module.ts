@@ -7,6 +7,8 @@ import { TooltipModule } from 'primeng/primeng';
 import { ResourcesComponent } from './resources.component';
 import { ResourcesBarComponent } from './resources-bar/resources-bar.component';
 
+import { ResourceService } from '../../shared/db/resource/resource.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,6 +19,7 @@ import { ResourcesBarComponent } from './resources-bar/resources-bar.component';
     ResourcesComponent,
     ResourcesBarComponent
   ],
-  exports: [ResourcesBarComponent]
+  exports: [ResourcesBarComponent],
+  providers: [ResourceService]
 })
 export class ResourcesModule { }

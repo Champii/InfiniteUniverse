@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ResourceService } from '../../shared/db/resource/resource.service';
 import { Building } from '../../shared/db/building/building.model';
 
 @Component({
@@ -9,12 +10,12 @@ import { Building } from '../../shared/db/building/building.model';
 })
 export class ResourcesComponent implements OnInit {
   buildings: [Building];
-  constructor() { }
+  constructor(public resourceService: ResourceService) { }
 
   ngOnInit() {
-    this.buildings = [
-      { id: 1, name: 'metal mine', icon: 'metal', level: 1, description: 'Metal mining factory' }
-    ];
+    // this.buildings = [
+    //   { id: 1, name: 'metal mine', icon: 'metal', level: 1, description: 'Metal mining factory' }
+    // ];
   }
 
 }

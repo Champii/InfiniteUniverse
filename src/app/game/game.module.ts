@@ -13,6 +13,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ResourcesModule } from './resources/resources.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { HeaderModule } from './header/header.module';
+import { SearchModule } from './search/search.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { HeaderModule } from './header/header.module';
     DashboardModule,
     ResourcesModule,
     SidebarModule,
-    HeaderModule
+    HeaderModule,
+    SearchModule
   ],
   declarations: [GameComponent, MenuComponent]
 })
