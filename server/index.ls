@@ -4,6 +4,6 @@ require! {
 
 Player
   .Create do
-    login:    \toto
+    username: \toto
     password: \toto
   .Catch console.error

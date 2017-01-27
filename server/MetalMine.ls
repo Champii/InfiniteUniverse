@@ -14,8 +14,6 @@ class MetalMine extends Mine.Extend \metalmine, Mine.Route, schema: \strict, max
 
 
 MetalMine
-  ..Field \amount     \int .Default 100
-  ..Field \production \int .Default 30
-  ..Field \price      \obj .Virtual -> @_Price @level
+  ..Field \amount     \int .Default 500
 
 module.exports = MetalMine

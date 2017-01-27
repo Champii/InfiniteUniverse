@@ -14,7 +14,5 @@ class DeutMine extends Mine.Extend \deutmine, Mine.Route, schema: \strict, maxDe
 
 DeutMine
   ..Field \amount     \int .Default 0
-  ..Field \production \int .Default 0
-  ..Field \price      \obj .Virtual -> @_Price @level
 
 module.exports = DeutMine

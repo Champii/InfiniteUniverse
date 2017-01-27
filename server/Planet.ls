@@ -11,37 +11,37 @@ class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
       throw 'Not enought resources'
 
-    @Metalmine
-      .Set amount: @Metalmine.amount - price.metal
-      .Then ~> @Crystalmine
-      .Set amount: @Crystalmine.amount - price.crystal
+    @metalmine
+      .Set amount: @metalmine.amount - price.metal
+      .Then ~> @crystalmine
+      .Set amount: @crystalmine.amount - price.crystal
       .Then ~>
         if price.deut
-          return @Deutmine.Set amount: @Deutmine.amount - price.deut
+          return @deutmine.Set amount: @deutmine.amount - price.deut
         @
 
   _AvailableEnergy: ->
-    @Solarplant.energy - @Metalmine.consumption - @Crystalmine.consumption - @Deutmine.consumption
+    @solarplant.energy - @metalmine.consumption - @crystalmine.consumption - @deutmine.consumption
 
   ToJSON: ->
     serie = super!
-    delete serie.Metalmine?.Planet
-    delete serie.Crystalmine?.Planet
-    delete serie.Deutmine?.Planet
-    delete serie.Solarplant?.Planet
-    delete serie.Player?.Planets
+    delete serie.metalmine?.planet
+    delete serie.crystalmine?.planet
+    delete serie.deutmine?.planet
+    delete serie.solarplant?.planet
+    delete serie.player?.planet
     serie
 
 Planet
   ..Field \position \string
   ..Field \amount   \obj    .Virtual ->
-    if not it.Metalmine?
+    if not @metalmine?
       return
 
-    metal:   it.Metalmine?.amount || 0
-    crystal: it.Crystalmine?.amount || 0
-    deut:    it.Deutmine?.amount || 0
-    energy:  it._AvailableEnergy! || 0
+    metal:   Math.floor @metalmine?.amount || 0
+    crystal: Math.floor @crystalmine?.amount || 0
+    deut:    Math.floor @deutmine?.amount || 0
+    energy:  Math.floor @_AvailableEnergy! || 0
 
   ..HasOne MetalMine
   ..HasOne CrystalMine
