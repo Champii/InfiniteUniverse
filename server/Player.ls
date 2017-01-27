@@ -6,13 +6,17 @@ require! {
   \./SolarPlant
 }
 
-Player = N \player N.Route.Collection, schema: \strict , maxDepth: 2
-  ..Field \login    \string
+class PlayerRoute extends N.Route
+  Config: ->
+    @Get \/:id @IsOwn('id'), ~> @resource.Fetch it.params.id
+    @Get ~> @resource.List!
+
+Player = N.AccountResource \player PlayerRoute, schema: \strict, maxDepth: 2
+  ..Field \username \string
   ..Field \password \string
   ..HasMany Planet
 
 Player.Watch \new (player) ->
-
   planet = Planet
     .Create do
       position: \test
