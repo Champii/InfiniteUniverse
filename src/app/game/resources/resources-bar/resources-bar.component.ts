@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ResourceService } from '../../../shared/db/resource/resource.service';
 import { Resource } from '../../../shared/db/resource/resource.model';
 
 @Component({
@@ -9,14 +10,16 @@ import { Resource } from '../../../shared/db/resource/resource.model';
 })
 export class ResourcesBarComponent implements OnInit {
   public resources: [Resource];
-  constructor() { }
+  constructor(public resourceService: ResourceService) {
+    console.log('resource', this.resourceService.resources);
+  }
 
   ngOnInit() {
-    this.resources = [
-      { id: 1, name: 'metal', quantity: 12300},
-      { id: 1, name: 'crystal', quantity: 2450},
-      { id: 1, name: 'deuterium', quantity: 347}
-    ];
+    // this.resources = [
+    //   { id: 1, name: 'metal', quantity: 12300},
+    //   { id: 1, name: 'crystal', quantity: 2450},
+    //   { id: 1, name: 'deuterium', quantity: 347}
+    // ];
   }
   setIcon(icon) {
     return 'fa ' + icon;

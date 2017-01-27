@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedComponent } from './shared.component';
+
+import { PlanetService } from './db/planet/planet.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [SharedComponent]
+  declarations: [],
+  providers: [
+    PlanetService
+  ]
 })
 export class SharedModule { }
