@@ -13,7 +13,7 @@ class SolarPlant extends Building.Extend \solarplant, Building.Route, schema: \s
 
   ToJSON: ->
     serie = super!
-    delete serie.Planet
+    delete serie.planet
     serie
 
 SolarPlant

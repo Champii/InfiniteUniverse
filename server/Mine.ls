@@ -10,7 +10,7 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
       done = (err, instance) ~>
         return oldDone err if err?
 
-        if not instance.Planet?Solarplant?
+        if not instance.planet?solarplant?
           return oldDone null, instance
 
         instance
@@ -23,7 +23,7 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
     else
       instance = super ...
 
-      if not instance.Planet?Solarplant?
+      if not instance.planet?solarplant?
         return instance
 
       instance.Then -> it.Update!
@@ -38,26 +38,26 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
   ToJSON: ->
     serie = super!
     serie.amount      = Math.floor serie.amount
-    delete serie.Planet?.Metalmine
-    delete serie.Planet?.Crystalmine
-    delete serie.Planet?.Deutmine
-    delete serie.Planet?.Solarplant
-    delete serie.Planet?.Player
+    delete serie.planet?.metalmine
+    delete serie.planet?.crystalmine
+    delete serie.planet?.deutmine
+    delete serie.planet?.solarplant
+    delete serie.planet?.player
     serie
 
   _PercentProduction: ->
-    if not @Planet?Solarplant?
+    if not @planet?solarplant?
       return 0
 
-    if @Planet.Solarplant.energy is 0
+    if @planet.solarplant.energy is 0
       return 0
 
-    if @Planet.amount.energy >= 0
+    if @planet.amount.energy >= 0
       return 1
 
-    consumption = @Planet.Metalmine.consumption + @Planet.Crystalmine.consumption + @Planet.Deutmine.consumption
+    consumption = @planet.metalmine.consumption + @planet.crystalmine.consumption + @planet.deutmine.consumption
 
-    @Planet.Solarplant.energy / consumption
+    @planet.solarplant.energy / consumption
 
   _Consumption: -> ...
 

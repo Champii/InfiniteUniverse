@@ -14,11 +14,11 @@ class Building extends N \building, BuildingRoute, abstract: true
   LevelUp: ->
     time = @_BuildingTime!
 
-    Queue.List planetId: @Planet.id
+    Queue.List planetId: @planet.id
       .Then ~>
         if it.length
           throw 'Already constructing'
-      .Then ~> @Planet.Fetch!
+      .Then ~> @planet.Fetch!
       .Then !~> it.Buy @_Price @level
       .Then ~> Queue.Timeout \level_up, it.id, time, id: @id, type: capitalize @_type
       .Then ~> N[capitalize @_type].Fetch @id #fixme by @Fetch!
