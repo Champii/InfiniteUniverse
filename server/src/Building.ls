@@ -30,7 +30,6 @@ class Building extends N \building, BuildingRoute, abstract: true
     0 #tempDevValue
 
   _Price: -> ...
-  _Production: -> ...
 
 Building
   ..Field \level          \int .Default 0

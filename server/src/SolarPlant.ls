@@ -3,7 +3,7 @@ require! {
   \./Queue
 }
 
-class SolarPlant extends Building.Extend \solarplant, Building.Route, schema: \strict, maxDepth: 2
+class SolarPlant extends Building.Extend \solarplant, Building.Route, schema: \strict, maxDepth: 3
 
   _Price: (level) ->
     metal:   75 * (1.5 ^ (level - 1))

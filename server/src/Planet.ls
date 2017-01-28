@@ -1,5 +1,7 @@
 require! {
+  async
   \./AuthRoute
+
 }
 
 class PlanetRoute extends AuthRoute
@@ -17,17 +19,21 @@ class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
       throw 'Not enought resources'
 
-    @metalmine
-      .Set amount: @metalmine.amount - price.metal
-      .Then ~> @crystalmine
-      .Set amount: @crystalmine.amount - price.crystal
+    mines = @_GetMines!
+
+    mines.metalmine
+      .Set amount: mines.metalmine.amount - price.metal
+      .Then ~> mines.crystalmine
+      .Set amount: mines.crystalmine.amount - price.crystal
       .Then ~>
         if price.deut
-          return @deutmine.Set amount: @deutmine.amount - price.deut
+          return mines.deutmine.Set amount: mines.deutmine.amount - price.deut
         @
 
   _AvailableEnergy: ->
-    @solarplant.energy - @metalmine.consumption - @crystalmine.consumption - @deutmine.consumption
+    return 0 if not @solarplant?
+
+    @solarplant.energy - (sum map (.consumption), @mines)
 
   _ProdRatio: ->
     if not @solarplant?
@@ -39,28 +45,40 @@ class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
     if @_AvailableEnergy! >= 0
       return 1
 
-    consumption = @metalmine.consumption + @crystalmine.consumption + @deutmine.consumption
+    consumption = (sum map (.consumption), @mines)
 
     @solarplant.energy / consumption
 
+  _GetMines: ->
+    return {} if not @mines?
+
+    # async.mapSeries @mines, (mine, done) ~>
+    #   mine
+    #     .Update!
+    #     .Then flip done
+    #     .Catch done
+    # , (err, res) ~>
+    #   console.log err, res
+
+    metalmine:   find (.name is \metal),  @mines
+    crystalmine: find (.name is \crystal),  @mines
+    deutmine:    find (.name is \deut),  @mines
+
   ToJSON: ->
     serie = super!
-    delete serie.metalmine?.planet
-    delete serie.crystalmine?.planet
-    delete serie.deutmine?.planet
-    delete serie.solarplant?.planet
-    delete serie.player?.planet
+    delete serie.player
     serie
 
 Planet
   ..Field \position \string
   ..Field \amount   \obj    .Virtual ->
-    if not @metalmine?
+    mines = @_GetMines!
+    if not mines.metalmine?
       return
 
-    metal:   Math.floor @metalmine?.amount || 0
-    crystal: Math.floor @crystalmine?.amount || 0
-    deut:    Math.floor @deutmine?.amount || 0
+    metal:   Math.floor mines.metalmine?.amount || 0
+    crystal: Math.floor mines.crystalmine?.amount || 0
+    deut:    Math.floor mines.deutmine?.amount || 0
     energy:  Math.floor @_AvailableEnergy! || 0
 
   ..Field \prodRatio \obj  .Virtual -> +(@_ProdRatio!toFixed 4)
@@ -68,14 +86,10 @@ Planet
 module.exports = Planet
 
 require! {
-  \./MetalMine
-  \./CrystalMine
-  \./DeutMine
+  \./Mine
   \./SolarPlant
 }
 
 Planet
-  ..HasOne MetalMine
-  ..HasOne CrystalMine
-  ..HasOne DeutMine
+  ..HasMany Mine, \mines
   ..HasOne SolarPlant
