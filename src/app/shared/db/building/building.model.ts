@@ -1,3 +1,5 @@
+import { Stack } from '../shared/stack';
+
 /**
  * Building
  */
@@ -10,5 +12,5 @@ export class Building {
   description: string;
   lastUpdate: string;
   planetId: number;
-  price: {};
+  price: Stack;
 }

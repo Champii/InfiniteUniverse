@@ -2,11 +2,8 @@
  * Resource
  */
 export class Resource {
-  public quantity: number;
   constructor(
-    public id: number,
-    public name: string
-  ) {
-    this.quantity = 0;
-  }
+    public name: string,
+    public quantity: number
+  ) {}
 }

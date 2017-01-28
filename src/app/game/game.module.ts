@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {MenuModule } from 'primeng/primeng';
-import {ButtonModule} from 'primeng/primeng';
-import {TooltipModule} from 'primeng/primeng';
+import { SharedModule } from '../shared/shared.module';
+import { MenuModule } from 'primeng/primeng';
+import { ButtonModule} from 'primeng/primeng';
+import { TooltipModule } from 'primeng/primeng';
 
 import { GameRoutingModule } from './game.routing';
 
@@ -18,6 +19,7 @@ import { SearchModule } from './search/search.module';
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     GameRoutingModule,
     MenuModule,
     ButtonModule,

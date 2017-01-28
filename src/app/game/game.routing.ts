@@ -3,11 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { GameComponent } from './game.component';
 
+import { PlanetResolveService } from '../shared/db/planet/planet-resolver.service';
+
 import { DashboardRoutes } from './dashboard/dashboard.routing';
 import { ResourcesRoutes } from './resources/resources.routing';
 
-let childrenRaw = [ResourcesRoutes, DashboardRoutes];
-let children: Routes = [];
+const childrenRaw = [ResourcesRoutes, DashboardRoutes];
+const children: Routes = [];
 
 childrenRaw.map((routes) => {
   routes.map((route) => {
@@ -15,14 +17,16 @@ childrenRaw.map((routes) => {
   });
 });
 
-console.log('children', children);
 const routes: Routes = [
   {
     path: '', component: GameComponent,
-    children: children
+    children: children,
+    resolve: {
+      planets: PlanetResolveService
+    }
   }
 ];
-console.log('routes', routes);
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

@@ -16,12 +16,12 @@ export class ResourceService extends Rest {
     this.set('resource');
     this.resources = [];
     this.resourcesLink = {};
-    const resourcesTab = ['metal', 'crystal', 'deuterium'];
-    resourcesTab.forEach((resource, key) => {
-      let resourceItem = new Resource(key, resource);
-      this.resources.push(resourceItem);
-      this.resourcesLink[resource] = this.resources[key];
-    });
+    // const resourcesTab = ['metal', 'crystal', 'deuterium'];
+    // resourcesTab.forEach((resource, key) => {
+    //   const resourceItem = new Resource(key, resource);
+    //   this.resources.push(resourceItem);
+    //   this.resourcesLink[resource] = this.resources[key];
+    // });
   }
 
 }

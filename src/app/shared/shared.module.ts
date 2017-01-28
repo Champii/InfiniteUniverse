@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PlanetService } from './db/planet/planet.service';
+import { PlanetService, PlanetResolveService } from './db/planet';
 
 @NgModule({
   imports: [
@@ -9,7 +9,8 @@ import { PlanetService } from './db/planet/planet.service';
   ],
   declarations: [],
   providers: [
-    PlanetService
+    PlanetService,
+    PlanetResolveService
   ]
 })
 export class SharedModule { }
