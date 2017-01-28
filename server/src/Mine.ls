@@ -2,7 +2,7 @@ require! {
   \./Building
 }
 
-class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDepth: 2
+class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDepth: 3
 
   @Fetch = (arg, done, _depth) ->
     if done?
@@ -42,6 +42,7 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
     delete serie.planet?.crystalmine
     delete serie.planet?.deutmine
     delete serie.planet?.solarplant
+    delete serie.player
     serie
 
   _PercentProduction: ->

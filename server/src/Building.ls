@@ -1,14 +1,13 @@
 require! {
+  \./AuthRoute
   \./Queue
 }
 
-class BuildingRoute extends N.Route
+class BuildingRoute extends AuthRoute
 
   Config: ->
-    @All \/:id* ~> it.SetInstance @resource.Fetch it.params.id
-    deepAuth = @IsOwnDeep (._instance.player.id)
-    @Put \/:id/levelup, deepAuth, (.instance.LevelUp!)
-    @Get \/:id deepAuth, (.instance)
+    super!
+    @Put \/:id/levelup, @deepAuth, (.instance.LevelUp!)
 
 class Building extends N \building, BuildingRoute, abstract: true
 
@@ -42,11 +41,6 @@ Building
     crystal: Math.floor amount.crystal
 
 module.exports = Building
-
-require! {
-  \./Player
-  \./Planet
-}
 
 N.bus.on \level_up ->
   N[it.type]

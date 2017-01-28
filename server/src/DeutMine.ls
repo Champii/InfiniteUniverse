@@ -2,7 +2,7 @@ require! {
   \./Mine
 }
 
-class DeutMine extends Mine.Extend \deutmine, Mine.Route, schema: \strict, maxDepth: 2
+class DeutMine extends Mine.Extend \deutmine, Mine.Route, schema: \strict, maxDepth: 3
 
   _Price: (level) ->
     metal:   225 * (1.5 ^ (level - 1))
@@ -16,3 +16,11 @@ DeutMine
   ..Field \amount     \int .Default 0
 
 module.exports = DeutMine
+
+require! {
+  \./Player
+  \./Planet
+}
+
+DeutMine
+  ..HasOneThrough Player, Planet
