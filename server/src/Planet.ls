@@ -1,5 +1,14 @@
+require! {
+  \./AuthRoute
+}
 
-class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
+class PlanetRoute extends AuthRoute
+
+  Config: ->
+    super!
+    @Get @Auth!, ~> @resource.List { playerId: it.user.id }, 0
+
+class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
 
   Buy: @_WrapResolvePromise (price) ->
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)

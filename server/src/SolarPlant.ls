@@ -20,3 +20,11 @@ SolarPlant
   ..Field \energy     \int  .Virtual -> Math.floor @_Production @level
 
 module.exports = SolarPlant
+
+require! {
+  \./Player
+  \./Planet
+}
+
+SolarPlant
+  ..HasOneThrough Player, Planet
