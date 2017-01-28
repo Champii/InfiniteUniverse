@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Building } from '../../../shared/db/building/building.model';
+import { Mine } from '../../../shared/db/building/mine/mine.model';
 
 @Component({
   selector: 'app-buildings',
@@ -9,7 +10,7 @@ import { Building } from '../../../shared/db/building/building.model';
 })
 export class BuildingsComponent implements OnInit {
   @Input() header: string;
-  @Input() buildings: [Building];
+  @Input() buildings: Building[];
   constructor() { }
 
   ngOnInit() {

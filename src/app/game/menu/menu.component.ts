@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
       {
         label: this.planetService.current.name,
         items: [
-          {label: 'Resources', icon: 'fa-industry', routerLink: ['/resources']},
+          {label: 'Factories', icon: 'fa-industry', routerLink: ['/factories']},
           {label: 'Shipyard', icon: 'fa-space-shuttle'},
           {label: 'Research', icon: 'fa-flask'}
         ]

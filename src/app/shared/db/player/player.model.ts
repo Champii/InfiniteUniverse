@@ -3,6 +3,6 @@
  */
 export class Player {
   id: number;
-  login: string;
+  username: string;
   password: string;
 }

@@ -11,7 +11,7 @@ import { GameRoutingModule } from './game.routing';
 import { GameComponent } from './game.component';
 import { MenuComponent } from './menu/menu.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { ResourcesModule } from './resources/resources.module';
+import { FactoriesModule } from './factories/factories.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { HeaderModule } from './header/header.module';
 import { SearchModule } from './search/search.module';
@@ -25,7 +25,7 @@ import { SearchModule } from './search/search.module';
     ButtonModule,
     TooltipModule,
     DashboardModule,
-    ResourcesModule,
+    FactoriesModule,
     SidebarModule,
     HeaderModule,
     SearchModule

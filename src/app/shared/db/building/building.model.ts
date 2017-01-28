@@ -5,7 +5,6 @@ import { Stack } from '../shared/stack';
  */
 export class Building {
   id: number;
-  name: string;
   level: number;
   buildingFinish: number;
   icon: string;
@@ -13,4 +12,11 @@ export class Building {
   lastUpdate: string;
   planetId: number;
   price: Stack;
+
+  constructor(public name: string, public slug: string, body) {
+    this.id = body.id;
+    this.level = body.level;
+    this.buildingFinish = body.buildingFinish;
+    this.price = body.price;
+  }
 }

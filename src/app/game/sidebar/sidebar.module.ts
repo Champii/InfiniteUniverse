@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { SharedModule } from '../../shared/shared.module';
 import { PanelModule } from 'primeng/primeng';
@@ -12,7 +13,8 @@ import { PlanetsComponent } from './planets/planets.component';
   imports: [
     CommonModule,
     SharedModule,
-    PanelModule
+    PanelModule,
+    RouterModule
   ],
   declarations: [
     SidebarComponent,
