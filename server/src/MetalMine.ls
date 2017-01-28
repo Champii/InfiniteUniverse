@@ -12,8 +12,17 @@ class MetalMine extends Mine.Extend \metalmine, Mine.Route, schema: \strict, max
 
   _Consumption: (level) -> 10 * level * (1.1 ^ level)
 
-
 MetalMine
   ..Field \amount     \int .Default 500
 
 module.exports = MetalMine
+
+require! {
+  \./Player
+  \./Planet
+}
+
+MetalMine
+  ..HasOneThrough Player, Planet
+
+

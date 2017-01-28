@@ -2,12 +2,13 @@ require! {
   \./Queue
 }
 
-class BuildingRoute extends N.Route.Collection
+class BuildingRoute extends N.Route
 
   Config: ->
-    super!
-    @Put \/:id/levelup (.instance.LevelUp!)
-    @Get -> null
+    @All \/:id* ~> it.SetInstance @resource.Fetch it.params.id
+    deepAuth = @IsOwnDeep (._instance.player.id)
+    @Put \/:id/levelup, deepAuth, (.instance.LevelUp!)
+    @Get \/:id deepAuth, (.instance)
 
 class Building extends N \building, BuildingRoute, abstract: true
 
@@ -42,9 +43,15 @@ Building
 
 module.exports = Building
 
+require! {
+  \./Player
+  \./Planet
+}
+
 N.bus.on \level_up ->
   N[it.type]
     .Fetch it.id
     .Set (.level++)
     .Set (.buildingFinish = 0)
     .Catch console.error
+

@@ -42,7 +42,6 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
     delete serie.planet?.crystalmine
     delete serie.planet?.deutmine
     delete serie.planet?.solarplant
-    delete serie.planet?.player
     serie
 
   _PercentProduction: ->

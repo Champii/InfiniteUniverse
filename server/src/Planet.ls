@@ -1,9 +1,3 @@
-require! {
-  \./MetalMine
-  \./CrystalMine
-  \./DeutMine
-  \./SolarPlant
-}
 
 class Planet extends  N \planet N.Route.Collection, schema: \strict, maxDepth: 3
 
@@ -43,9 +37,17 @@ Planet
     deut:    Math.floor @deutmine?.amount || 0
     energy:  Math.floor @_AvailableEnergy! || 0
 
+module.exports = Planet
+
+require! {
+  \./MetalMine
+  \./CrystalMine
+  \./DeutMine
+  \./SolarPlant
+}
+
+Planet
   ..HasOne MetalMine
   ..HasOne CrystalMine
   ..HasOne DeutMine
   ..HasOne SolarPlant
-
-module.exports = Planet

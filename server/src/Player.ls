@@ -1,11 +1,3 @@
-require! {
-  \./Planet
-  \./MetalMine
-  \./CrystalMine
-  \./DeutMine
-  \./SolarPlant
-}
-
 class PlayerRoute extends N.Route
   Config: ->
     @Get \/:id @IsOwn('id'), ~> @resource.Fetch it.params.id
@@ -14,6 +6,18 @@ class PlayerRoute extends N.Route
 Player = N.AccountResource \player PlayerRoute, schema: \strict, maxDepth: 2
   ..Field \username \string
   ..Field \password \string
+
+module.exports = Player
+
+require! {
+  \./Planet
+  \./MetalMine
+  \./CrystalMine
+  \./DeutMine
+  \./SolarPlant
+}
+
+Player
   ..HasMany Planet
 
 Player.Watch \new (player) ->
@@ -39,4 +43,3 @@ Player.Watch \new (player) ->
     .Create planetId: planet, level: 20
     .Catch console.error
 
-module.exports = Player
