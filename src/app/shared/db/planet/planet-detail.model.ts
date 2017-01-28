@@ -4,9 +4,9 @@ import { Player } from '../player/player.model';
 import { Stack } from '../shared/stack';
 
 /**
- * Planet
+ * PlanetDetail
  */
-export class Planet {
+export class PlanetDetail {
   id: number;
   name: string;
   position: string;

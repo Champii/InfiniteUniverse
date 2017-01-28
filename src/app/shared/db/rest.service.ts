@@ -12,22 +12,26 @@ export class Rest {
   options = new RequestOptions({ headers: this.headers });
   baseUrl: string;
   url: string;
-  list: Array<any> = [];
+  list: any[] = [];
   constructor(http: Http) {
     this.http = http;
     this.baseUrl = '/api/1/';
   }
 
-  find(): Observable<any> {
-      return this.http.get(this.url, this.options)
-        .map((response: Response) => this.list = response.json())
-        .catch((error) => {
-          return this.handleError(error);
-      });
+  find(callback: Function): Observable<any> {
+    return this.http.get(this.url, this.options)
+      .map((response: Response) => {
+        this.list = response.json();
+        callback();
+        return this.list;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+    });
   }
 
   upload(name: string, file: any): Observable<any> {
-    let formData = new FormData();
+    const formData = new FormData();
     const ext = '.' + file.name.split('.').reverse()[0];
     formData.append('file',  file, file.name.split(ext)[0]);
 

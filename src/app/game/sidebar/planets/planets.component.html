@@ -1,8 +1,8 @@
 <div>
-  <div>3/4 Planets</div>
-  <div *ngFor="let planet of planets">
-    <img src="planet.icon" alt="">
+  <div class="nb-planets"><span>{{ planetService.list.length }}</span> Planets</div>
+  <div class="planet-item" *ngFor="let planet of planetService.list">
+    <img [src]="planetService.getIcon()" alt="">
     <div>{{ planet.name }}</div>
-    <div>{{ displayPos(planet) }}</div>
+    <div>{{ planet.position }}</div>
   </div>
 </div>
