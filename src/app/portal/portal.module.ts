@@ -4,16 +4,20 @@ import { PortalComponent } from './portal.component';
 import {PanelModule} from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/primeng';
+import { FormsModule } from '@angular/forms';
 
+import { SharedModule } from '../shared/shared.module';
 import { PortalRoutingModule } from './portal.routing';
 
 @NgModule({
   imports: [
     CommonModule,
-    PanelModule,
+    SharedModule,
     PortalRoutingModule,
+    PanelModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    FormsModule
   ],
   declarations: [PortalComponent]
 })

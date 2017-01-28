@@ -6,9 +6,13 @@ import { GameComponent } from './game.component';
 import { PlanetResolveService } from '../shared/db/planet/planet-resolver.service';
 
 import { DashboardRoutes } from './dashboard/dashboard.routing';
-import { ResourcesRoutes } from './resources/resources.routing';
+import { FactoriesRoutes } from './factories/factories.routing';
 
-const childrenRaw = [ResourcesRoutes, DashboardRoutes];
+const childrenRaw = [
+  FactoriesRoutes,
+  DashboardRoutes
+];
+
 const children: Routes = [];
 
 childrenRaw.map((routes) => {
@@ -26,6 +30,8 @@ const routes: Routes = [
     }
   }
 ];
+
+console.log('routes', routes);
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

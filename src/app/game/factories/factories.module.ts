@@ -4,10 +4,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { TooltipModule } from 'primeng/primeng';
 
-import { ResourcesComponent } from './resources.component';
+import { FactoriesComponent } from './factories.component';
 import { ResourcesBarComponent } from './resources-bar/resources-bar.component';
-
-import { ResourceService } from '../../shared/db/resource/resource.service';
 
 @NgModule({
   imports: [
@@ -16,10 +14,10 @@ import { ResourceService } from '../../shared/db/resource/resource.service';
     TooltipModule
   ],
   declarations: [
-    ResourcesComponent,
+    FactoriesComponent,
     ResourcesBarComponent
   ],
   exports: [ResourcesBarComponent],
-  providers: [ResourceService]
+  providers: []
 })
-export class ResourcesModule { }
+export class FactoriesModule { }
