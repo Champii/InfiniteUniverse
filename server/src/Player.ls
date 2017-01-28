@@ -28,18 +28,18 @@ Player.Watch \new (player) ->
     .Catch console.error
 
   MetalMine
-    .Create planetId: planet, level: 10
+    .Create planetId: planet, level: 1
     .Catch console.error
 
   CrystalMine
-    .Create planetId: planet, level: 10
+    .Create planetId: planet, level: 1
     .Catch console.error
 
   DeutMine
-    .Create planetId: planet, level: 10
+    .Create planetId: planet, level: 1
     .Catch console.error
 
   SolarPlant
-    .Create planetId: planet, level: 20
+    .Create planetId: planet, level: 1
     .Catch console.error
 

@@ -6,7 +6,10 @@ class PlanetRoute extends AuthRoute
 
   Config: ->
     super!
-    @Get @Auth!, ~> @resource.List { playerId: it.user.id }, 0
+    @Get @Auth!, ~>
+      @resource
+        .List { playerId: it.user.id }, {fields: ['id', 'position']}, 0
+        .Then map -> it{id, position}
 
 class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
 
@@ -25,6 +28,20 @@ class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
 
   _AvailableEnergy: ->
     @solarplant.energy - @metalmine.consumption - @crystalmine.consumption - @deutmine.consumption
+
+  _ProdRatio: ->
+    if not @solarplant?
+      return 0
+
+    if @solarplant.energy is 0
+      return 0
+
+    if @_AvailableEnergy! >= 0
+      return 1
+
+    consumption = @metalmine.consumption + @crystalmine.consumption + @deutmine.consumption
+
+    @solarplant.energy / consumption
 
   ToJSON: ->
     serie = super!
@@ -45,6 +62,8 @@ Planet
     crystal: Math.floor @crystalmine?.amount || 0
     deut:    Math.floor @deutmine?.amount || 0
     energy:  Math.floor @_AvailableEnergy! || 0
+
+  ..Field \prodRatio \obj  .Virtual -> +(@_ProdRatio!toFixed 4)
 
 module.exports = Planet
 

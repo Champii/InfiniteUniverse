@@ -8,7 +8,7 @@ class CrystalMine extends Mine.Extend \crystalmine, Mine.Route, schema: \strict,
     metal:   48 * (1.6 ^ (level - 1))
     crystal: 24 * (1.6 ^ (level - 1))
 
-  _Production: (level) -> 20 * level * (1.1 ^ level) * @_PercentProduction!
+  _Production: (level) -> 20 * level * (1.1 ^ level) * @_ProdRatio!
 
   _Consumption: (level) -> 10 * level * (1.1 ^ level)
 

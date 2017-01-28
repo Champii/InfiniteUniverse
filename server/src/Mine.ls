@@ -42,22 +42,12 @@ class Mine extends Building.Extend \mine, Building.Route, abstract: true, maxDep
     delete serie.planet?.crystalmine
     delete serie.planet?.deutmine
     delete serie.planet?.solarplant
+    delete serie.planet?.player
     delete serie.player
     serie
 
-  _PercentProduction: ->
-    if not @planet?solarplant?
-      return 0
-
-    if @planet.solarplant.energy is 0
-      return 0
-
-    if @planet.amount.energy >= 0
-      return 1
-
-    consumption = @planet.metalmine.consumption + @planet.crystalmine.consumption + @planet.deutmine.consumption
-
-    @planet.solarplant.energy / consumption
+  _ProdRatio: ->
+    @planet?_ProdRatio! || 0
 
   _Consumption: -> ...
 
