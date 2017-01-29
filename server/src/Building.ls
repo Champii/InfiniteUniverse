@@ -3,6 +3,11 @@ require! {
   \./Queue
 }
 
+dependancies =
+  shipyard:
+    buildings:
+      roboticfactory: 2
+
 class BuildingRoute extends AuthRoute
 
   Config: ->
@@ -28,8 +33,28 @@ class Building extends N \building, BuildingRoute, abstract: true
 
   LevelUpApply: ->
     @
-      .Set (.level++)
-      .Set (.buildingFinish = 0)
+      .Set ->
+        level: it.level++
+        buildingFinish: 0
+      .Then !~>
+        it.planet[@_type] = it
+        it._CheckAvailability!
+
+  _CheckAvailability: ->
+    dependancies
+      |> Obj.filter ~> it.buildings?[@_type] <= @level
+      |> Obj.filter ~>
+        # allResearches = it.researches
+        #   |> obj-to-pairs
+        #   |> all ~> @player.researches[it.0].level >= it.1
+        allBuildings = it.buildings
+          |> obj-to-pairs
+          |> all ~> @planet[it.0].level >= it.1
+
+        allBuildings
+
+      |> keys
+      |> map ~> @planet[it].Set available: true
 
   _BuildingTime: ->
     return 0 if not @planet?roboticfactory

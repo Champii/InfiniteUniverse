@@ -90,6 +90,7 @@ require! {
   \./SolarPlant
   \./RoboticFactory
   \./Shipyard
+  \./Lab
 }
 
 Planet
@@ -97,6 +98,7 @@ Planet
   ..HasOne SolarPlant
   ..HasOne RoboticFactory
   ..HasOne Shipyard
+  ..HasOne Lab
 
 Planet.Watch \new (planet) ->
   Mine
@@ -122,6 +124,9 @@ Planet.Watch \new (planet) ->
       planetId: planet.id
       level: 0
     .Then -> Shipyard.Create do
+      planetId: planet.id
+      level: 0
+    .Then -> Lab.Create do
       planetId: planet.id
       level: 0
     .Catch console.error

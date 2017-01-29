@@ -1,6 +1,5 @@
 require! {
   \./Building
-  \./Queue
 }
 
 class Shipyard extends Building.Extend \Shipyard, Building.Route, schema: \strict, maxDepth: 3
