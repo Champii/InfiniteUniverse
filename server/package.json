@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "nodulator": "*"
+    "nodulator": "Champii/Nodulator#518872adedcc4e289aa07c82fd1e1412d770523c"
   },
   "scripts": {
     "compile": "lsc -c -o dist src",
