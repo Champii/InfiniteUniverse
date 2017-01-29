@@ -6,22 +6,22 @@ require! {
 formulas =
   metal:
     price: (level) ->
-      metal:   60 * (1.5 ^ (level - 1))
-      crystal: 15 * (1.5 ^ (level - 1))
+      metal:   60 * (1.5 ^ level)
+      crystal: 15 * (1.5 ^ level)
     production: (level) -> 30 * level * (1.1 ^ level)
     consumption: (level) -> 10 * level * (1.1 ^ level)
 
   crystal:
     price: (level) ->
-      metal:   48 * (1.6 ^ (level - 1))
-      crystal: 24 * (1.6 ^ (level - 1))
+      metal:   48 * (1.6 ^ level)
+      crystal: 24 * (1.6 ^ level)
     production: (level) -> 20 * level * (1.1 ^ level)
     consumption: (level) -> 10 * level * (1.1 ^ level)
 
   deut:
     price: (level) ->
-      metal:   225 * (1.5 ^ (level - 1))
-      crystal: 75 * (1.5 ^ (level - 1))
+      metal:   225 * (1.5 ^ level)
+      crystal: 75 * (1.5 ^ level)
     production: (level) -> 10 * level * (1.1 ^ level) * (-0.002 * 250tempPlanet + 1.28)
     consumption: (level) -> 20 * level * (1.1 ^ level)
 
@@ -89,6 +89,7 @@ class Mine extends Building.Extend \mine, Building.Route, schema: \strict maxDep
 
 Mine
   ..Field \name        \string
+  ..Field \available   \bool   .Default true
   ..Field \amount      \int    .Default 0
   ..Field \production  \int    .Virtual -> Math.floor @_Production @level
   ..Field \consumption \int    .Virtual -> Math.floor @_Consumption @level

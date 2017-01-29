@@ -21,6 +21,7 @@ require! {
   \./Planet
   \./Mine
   \./SolarPlant
+  \./RoboticFactory
 }
 
 Player
@@ -30,16 +31,8 @@ Mine
   ..HasOneThrough Player, Planet
 
 Player.Watch \new (player) ->
-  planet = Planet
+  Planet
     .Create do
       position: \test
       playerId: player.id
     .Catch console.error
-
-  Mine
-    .Create name: \metal amount: 500 planetId: planet, level: 10
-    .Then -> Mine.Create name: \crystal amount: 350 planetId: planet, level: 10
-    .Then -> Mine.Create name: \deut planetId: planet, level: 10
-    .Then -> SolarPlant.Create planetId: planet, level: 20
-    .Catch console.error
-

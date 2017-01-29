@@ -1,0 +1,107 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.1"
+  title: InfiniteUniverse
+
+# Describe your paths here
+paths:
+  /api/1/player:
+    get:
+      description: Return the full list of players
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/PlayerLight"
+        403:
+          description: Non authenticated
+        500:
+          description: Internal server error
+  /api/1/player/:id:
+    get:
+      description: Return the full list of players
+      responses:
+        200:
+          description: Successful response
+          schema:
+            "$ref": "#/definitions/Player"
+        403:
+          description: Non authenticated
+        500:
+          description: Internal server error
+  /api/1/planet:
+    get:
+      description: Return the list of all player's planets
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/PlanetLight"
+        403:
+          description: Non authenticated
+        500:
+          description: Internal server error
+  /api/1/planet/:id:
+    get:
+      description: Return the full list of players
+      responses:
+        200:
+          description: Successful response
+          schema:
+            "$ref": "#/definitions/Player"
+        403:
+          description: Non authenticated
+        500:
+          description: Internal server error
+
+definitions:
+
+  PlanetLight:
+    type: object
+    properties:
+      id:
+        type: integer
+      position:
+        type: integer
+
+  Planet:
+    type: object
+    properties:
+      id:
+        type: integer
+      position:
+        type: string
+      playerId:
+        type: integer
+      prodRatio:
+        type: integer
+
+  PlayerLight:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: integer
+
+  Player:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: integer
+      planets:
+        type: array
+        items:
+          $ref: "#/definitions/Planet"
+

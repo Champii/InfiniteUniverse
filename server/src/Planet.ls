@@ -88,8 +88,40 @@ module.exports = Planet
 require! {
   \./Mine
   \./SolarPlant
+  \./RoboticFactory
+  \./Shipyard
 }
 
 Planet
   ..HasMany Mine, \mines
   ..HasOne SolarPlant
+  ..HasOne RoboticFactory
+  ..HasOne Shipyard
+
+Planet.Watch \new (planet) ->
+  Mine
+    .Create do
+      name: \metal
+      amount: 5000
+      planetId: planet.id
+      level: 0
+    .Then -> Mine.Create do
+      name: \crystal
+      amount: 3500
+      planetId: planet.id
+      level: 0
+    .Then -> Mine.Create do
+      amount: 3500
+      name: \deut
+      planetId: planet.id
+      level: 0
+    .Then -> SolarPlant.Create do
+      planetId: planet.id
+      level: 0
+    .Then -> RoboticFactory.Create do
+      planetId: planet.id
+      level: 0
+    .Then -> Shipyard.Create do
+      planetId: planet.id
+      level: 0
+    .Catch console.error
