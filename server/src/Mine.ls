@@ -1,30 +1,8 @@
 require! {
   async
   \./Building
+  \./formulas
 }
-
-formulas =
-  metal:
-    price: (level) ->
-      metal:   60 * (1.5 ^ level)
-      crystal: 15 * (1.5 ^ level)
-    production: (level) -> 30 * level * (1.1 ^ level)
-    consumption: (level) -> 10 * level * (1.1 ^ level)
-
-  crystal:
-    price: (level) ->
-      metal:   48 * (1.6 ^ level)
-      crystal: 24 * (1.6 ^ level)
-    production: (level) -> 20 * level * (1.1 ^ level)
-    consumption: (level) -> 10 * level * (1.1 ^ level)
-
-  deut:
-    price: (level) ->
-      metal:   225 * (1.5 ^ level)
-      crystal: 75 * (1.5 ^ level)
-    production: (level) -> 10 * level * (1.1 ^ level) * (-0.002 * 250tempPlanet + 1.28)
-    consumption: (level) -> 20 * level * (1.1 ^ level)
-
 
 class Mine extends Building.Extend \mine, Building.Route, schema: \strict maxDepth: 3
 
@@ -75,9 +53,7 @@ class Mine extends Building.Extend \mine, Building.Route, schema: \strict maxDep
 
   ToJSON: ->
     serie = super!
-    serie.amount      = Math.floor serie.amount
-    delete serie.planet
-    delete serie.player
+    serie.amount = Math.floor serie.amount
     serie
 
   _ProdRatio: ->

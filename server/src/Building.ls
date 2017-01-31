@@ -1,12 +1,8 @@
 require! {
   \./AuthRoute
   \./Queue
+  \./formulas
 }
-
-dependancies =
-  shipyard:
-    buildings:
-      roboticfactory: 2
 
 class BuildingRoute extends AuthRoute
 
@@ -37,31 +33,53 @@ class Building extends N \building, BuildingRoute, abstract: true
         level: it.level++
         buildingFinish: 0
       .Then !~>
-        it.planet[@_type] = it
+        it.planet[@_type] = it # avoid refetch planet
         it._CheckAvailability!
 
   _CheckAvailability: ->
-    dependancies
-      |> Obj.filter ~> it.buildings?[@_type] <= @level
+    formulas
       |> Obj.filter ~>
-        # allResearches = it.researches
-        #   |> obj-to-pairs
-        #   |> all ~> @player.researches[it.0].level >= it.1
+        if @_type is \research
+          it.researches?[@name] <= @level
+        else
+          it.buildings?[@_type] <= @level
+
+      |> Obj.filter ~>
+
         allBuildings = it.buildings
           |> obj-to-pairs
           |> all ~> @planet[it.0].level >= it.1
 
-        allBuildings
+        allResearches = it.researches
+          |> obj-to-pairs
+          |> all (pair) ~>
+            research = find (.name is pair.0), @player.researches
+            research.level >= pair.1
 
-      |> keys
-      |> map ~> @planet[it].Set available: true
+        allBuildings && allResearches
+
+      |> obj-to-pairs
+      |> map (pairs) ~>
+        if pairs.1.isResearch
+          research = find (.name is pairs.0), @player.researches
+          research.Set available: true
+        else
+          @planet[pairs.0].Set available: true
+
+
 
   _BuildingTime: ->
     return 0 if not @planet?roboticfactory
     Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600
-    0 # dev tmp
+    1 # dev tmp
 
-  _Price: -> ...
+  _Price: -> formulas[@_type].price @level
+
+  ToJSON: ->
+    serie = super!
+    delete serie.planet
+    delete serie.player
+    serie
 
 Building
   ..Field \level          \int  .Default 0
@@ -80,6 +98,6 @@ module.exports = Building
 N.bus.on \level_up ->
   N[it.type]
     .Fetch it.id
-    .LevelUpApply!
+    .LevelUpApply it
     .Catch console.error
 

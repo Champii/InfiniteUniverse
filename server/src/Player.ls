@@ -22,10 +22,12 @@ require! {
   \./Mine
   \./SolarPlant
   \./RoboticFactory
+  \./Research
 }
 
 Player
   ..HasMany Planet, \planets
+  ..HasMany Research, \researches
 
 Mine
   ..HasOneThrough Player, Planet
@@ -34,5 +36,11 @@ Player.Watch \new (player) ->
   Planet
     .Create do
       position: \test
+      playerId: player.id
+    .Then -> Research.Create do
+      name: \energy
+      playerId: player.id
+    .Then -> Research.Create do
+      name: \combustionDrive
       playerId: player.id
     .Catch console.error
