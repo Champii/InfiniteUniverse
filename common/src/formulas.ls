@@ -1,4 +1,4 @@
-module.exports =
+formulas =
   metal:
     price: (level) ->
       metal:   60 * (1.5 ^ level)

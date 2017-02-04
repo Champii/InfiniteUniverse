@@ -11,10 +11,11 @@ class Planet
 
   findBuilding: (name) ->
 
-class Building
+class Entity
 
   (@id, @level, @planet) ->
     @price = @_price!
+    @available = @_availability!
 
   _buildingTime: ->
     return 0 if not @planet?roboticfactory
@@ -22,10 +23,24 @@ class Building
 
   _price: -> formulas[@displayName].price @level
 
-  # _availability: ->
-  #   formulas[@displayName].buildings?
-  #     |> Obj.filter ~>
-  #       @
+  _availability: ->
+    allBuildings = formulas[@displayName].buildings?
+      |> obj-to-pairs
+      |> all ~> @planet[it.0].level >= it.0
+
+    allResearches = formulas[@displayName].researches?
+      |> obj-to-pairs
+      |> all ~> @planet.player.researches[it.0].level >= it.0
+
+    allBuildings && allResearches
+
+
+class Research extends Entity
+
+
+class Building extends Entity
+
+
 
 
 
