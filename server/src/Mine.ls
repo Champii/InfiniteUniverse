@@ -56,6 +56,9 @@ class Mine extends Building.Extend \mine, Building.Route, schema: \strict maxDep
     serie.amount = Math.floor serie.amount
     serie
 
+  ToPage: ->
+    super! <<< @{ name, amount }
+
   _ProdRatio: ->
     @planet?_ProdRatio! || 0
 
@@ -67,9 +70,10 @@ Mine
   ..Field \name        \string
   ..Field \available   \bool   .Default true
   ..Field \amount      \int    .Default 0
+  ..Field \lastUpdate  \date   .Default new Date
+
   ..Field \production  \int    .Virtual -> Math.floor @_Production @level
   ..Field \consumption \int    .Virtual -> Math.floor @_Consumption @level
-  ..Field \lastUpdate  \date   .Default new Date
 
 module.exports = Mine
 

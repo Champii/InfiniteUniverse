@@ -8,10 +8,13 @@ class PlanetRoute extends AuthRoute
 
   Config: ->
     super!
+
+    @Get \/:id @deepAuth, (.instance.ToLightJSON!)
+
     @Get @Auth!, ~>
       @resource
-        .List { playerId: it.user.id }, {fields: ['id', 'position']}, 0
-        .Then map -> it{id, position}
+        .List { playerId: it.user.id }, 0
+        .Then map (.ToLightJSON!)
 
 class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
 
@@ -19,15 +22,13 @@ class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
       throw 'Not enought resources'
 
-    mines = @_GetMines!
-
-    mines.metalmine
-      .Set amount: mines.metalmine.amount - price.metal
-      .Then ~> mines.crystalmine
-      .Set amount: mines.crystalmine.amount - price.crystal
+    @metalmine
+      .Set amount: @metalmine.amount - price.metal
+      .Then ~> @crystalmine
+      .Set amount: @crystalmine.amount - price.crystal
       .Then ~>
         if price.deut
-          return mines.deutmine.Set amount: mines.deutmine.amount - price.deut
+          return @deutmine.Set amount: @deutmine.amount - price.deut
         @
 
   _AvailableEnergy: ->
@@ -49,39 +50,26 @@ class Planet extends  N \planet PlanetRoute, schema: \strict, maxDepth: 3
 
     @solarplant.energy / consumption
 
-  _GetMines: ->
-    return {} if not @mines?
+  ToLightJSON: ->
+    @ToJSON!{ id, name, position, type, amount }
 
-    # async.mapSeries @mines, (mine, done) ~>
-    #   mine
-    #     .Update!
-    #     .Then flip done
-    #     .Catch done
-    # , (err, res) ~>
-    #   console.log err, res
-
-    metalmine:   find (.name is \metal),  @mines
-    crystalmine: find (.name is \crystal),  @mines
-    deutmine:    find (.name is \deut),  @mines
-
-  ToJSON: ->
-    serie = super!
-    delete serie.player
-    serie
 
 Planet
+  ..Field \name     \string .Default \Planet
   ..Field \position \string
+  ..Field \metalmine        .Virtual -> it.mines.0
+  ..Field \crystalmine      .Virtual -> it.mines.1
+  ..Field \deutmine         .Virtual -> it.mines.2
+  ..Field \prodRatio \obj   .Internal! .Virtual -> +(@_ProdRatio!toFixed 4)
   ..Field \amount   \obj    .Virtual ->
-    mines = @_GetMines!
-    if not mines.metalmine?
+    if not @metalmine?
       return
 
-    metal:   Math.floor mines.metalmine?.amount || 0
-    crystal: Math.floor mines.crystalmine?.amount || 0
-    deut:    Math.floor mines.deutmine?.amount || 0
+    metal:   Math.floor @metalmine?.amount || 0
+    crystal: Math.floor @crystalmine?.amount || 0
+    deut:    Math.floor @deutmine?.amount || 0
     energy:  Math.floor @_AvailableEnergy! || 0
 
-  ..Field \prodRatio \obj  .Virtual -> +(@_ProdRatio!toFixed 4)
 
 module.exports = Planet
 

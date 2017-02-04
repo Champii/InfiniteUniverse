@@ -5,6 +5,4 @@ class AuthRoute extends N.Route
 
     @deepAuth = @IsOwnDeep (._instance.player.id)
 
-    @Get \/:id @deepAuth, (.instance)
-
 module.exports = AuthRoute

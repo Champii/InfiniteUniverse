@@ -1,15 +1,14 @@
 class PlayerRoute extends N.Route
 
   Config: ->
-    @Get \/:id @IsOwn('id'), ~> @resource.Fetch it.params.id
-    @Get ~> @resource.List 0
+    super!
 
-class Player extends N.AccountResource \player PlayerRoute, schema: \strict, maxDepth: 1
+    @Get @Auth!, (.user)
+
+class Player extends N.AccountResource \player PlayerRoute, schema: \strict
 
   ToJSON: ->
-    serie = super!
-    each (-> delete it.mines), serie?.planets?
-    serie
+    super!{ id, username }
 
 Player
   ..Field \username \string
@@ -23,11 +22,14 @@ require! {
   \./SolarPlant
   \./RoboticFactory
   \./Research
+
+  \./pages/Resource
+  \./pages/Facility
 }
 
 Player
   ..HasMany Planet, \planets
-  ..HasMany Research, \researches
+  ..HasOne  Research
 
 Mine
   ..HasOneThrough Player, Planet
@@ -38,9 +40,5 @@ Player.Watch \new (player) ->
       position: \test
       playerId: player.id
     .Then -> Research.Create do
-      name: \energy
-      playerId: player.id
-    .Then -> Research.Create do
-      name: \combustionDrive
       playerId: player.id
     .Catch console.error

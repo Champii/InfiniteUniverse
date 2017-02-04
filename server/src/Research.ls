@@ -22,6 +22,10 @@ class ResearchRoute extends Building.Route
       throw "Missing query parameter 'planetId'" if not it.query.planetId?
       it.instance.LevelUp +it.query.planetId
 
+    @Get \/:id isOwnPlanet, ->
+
+
+
 class Research extends Building.Extend \research, ResearchRoute, schema: \strict, maxDepth: 3
 
   LevelUp: (planetId) ->
@@ -54,6 +58,7 @@ class Research extends Building.Extend \research, ResearchRoute, schema: \strict
   _Price: -> formulas[@name].price @level
 
 Research
-  ..Field \name \string
+  ..Field \energy          \int .Default 0
+  ..Field \combustionDrive \int .Default 0
 
 module.exports = Research

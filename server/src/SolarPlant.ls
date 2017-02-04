@@ -17,6 +17,9 @@ class SolarPlant extends Building.Extend \solarplant, Building.Route, schema: \s
     delete serie.player
     serie
 
+  ToPage: ->
+    super! <<< @{ energy }
+
 SolarPlant
   ..Field \available \bool .Default true
   ..Field \energy \int     .Virtual -> Math.floor @_Production @level

@@ -81,10 +81,15 @@ class Building extends N \building, BuildingRoute, abstract: true
     delete serie.player
     serie
 
+  ToPage: ->
+    @{ id, level }
+
+
 Building
   ..Field \level          \int  .Default 0
   ..Field \available      \bool .Default false
   ..Field \buildingFinish \int  .Default 0
+
   ..Field \price          \obj  .Virtual ->
     @price = @_Price @level
 
