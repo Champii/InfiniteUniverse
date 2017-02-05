@@ -5,46 +5,56 @@ class QueueRoute extends N.Route
 
 class Queue extends N \queue QueueRoute, schema: \strict
 
-  @MonoSlot = (event, idObj, data, delay) ->
-    @_IsActive inObj, 1
-      .Then (active) ~>
-        @SetTimeout ({ event, data, active } <<< inObj), delay
+  @MonoSlot = (...args) ->
+    @QueueX ...args, 1
 
-  @QueueSlot = (event, inObj, data, delay) ->
-    @_IsActive inObj, 4
-      .Then (active) ~>
-        @SetTimeout ({ event, data, active } <<< inObj), delay
+  @QueueSlot = (...args) ->
+    @QueueX ...args, 4
 
-  @QueueX = (event, inObj, data, delay, maxSize) ->
+  @QueueX = (event, inObj, delay, data, maxSize) ->
     @_IsActive inObj, maxSize
       .Then (active) ~>
-        @SetTimeout ({ event, data, active } <<< inObj), delay
+
+        if active.length
+          maxDate = (maximum-by (.id), active .end)
+          if maxDate
+            delay += maxDate / 1000
+
+        @SetTimeout ({ event, data, active: !active.length } <<< inObj), delay
 
   @_IsActive = (inObj, maxSize) ->
-    @List idObj
+    @List inObj
       .Then ~>
-        if it.length > maxSize
+        if it.length >= maxSize
           throw 'Queue full'
 
         !it.length
 
+
+
   @SetTimeout = (obj, delay) ->
     obj.data = JSON.stringify obj.data
 
-    @Create obj
+    @Create (obj <<< { end: new Date(new Date().getTime! + (delay * 1000)) })
       .Then (queue) ~>
-        setTimeout ~>
-          queue.Delete!
+        if queue.active
+          setTimeout ~>
+            queue.Delete!
 
-          N.bus.emit queue.event, JSON.parse queue.data
-        , delay * 1000
+            N.bus.emit queue.event, JSON.parse queue.data
+            @SetNextTimeout obj
+          , delay * 1000
 
         queue
+
+  @SetNextTimeout = (obj) ->
+    @List obj{ event, active: false }
 
 Queue
   ..Field \planetId \int    .Optional!
   ..Field \playerId \int    .Optional!
   ..Field \active   \bool   .Default true
+  ..Field \end      \date
   ..Field \event    \string
   ..Field \data     \string
 

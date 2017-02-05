@@ -1,43 +1,48 @@
 require! {
   \./AuthRoute
   \./Queue
-  \../../common/src/formulas
+  \../../common/src : Lib
 }
 
 class BuildingRoute extends AuthRoute
 
   Config: ->
     super!
-    @All \/:name* @deepAuth, ~> @resource.Fetch { name }
-    @Put \/:name/levelup, @deepAuth, (.instance.LevelUp!)
+    @Put \/:id/:name/levelup, @deepAuth, (.instance.LevelUp it.params.name, it.user)
 
-class Building extends N \building, BuildingRoute
+class Building extends N \building, BuildingRoute, maxDepth: 2
 
-  # LevelUp: ->
-  #   throw 'Building not available now' if not @available
+  LevelUp: (name, user) ->
+    # console.log \LEVELUP @
+    planet = {}
+    building = {}
 
-  #   time = @_BuildingTime!
+    return Player
+      .Fetch user.id
+      .Then ~>
+        planet := new Lib.Planet @planet, it
+        building := planet.buildings[name]
 
-  #   Queue.List planetId: @planet.id
-  #     .Then ~>
-  #       if it.length
-  #         throw 'Already constructing'
-  #     .Then ~> @planet.Fetch!
-  #     .Then !~> it.Buy @price
-  #     .Then ~> Queue.Timeout \level_up, it.id, time, id: @id, type: capitalize @_type
-  #     .Then ~> N[capitalize @_type].Fetch @id #fixme by @Fetch!
-  #     .Set buildingFinish: new Date().getTime() + time
+        throw "Unknown building: #{name}" if not building?
 
-  # LevelUpApply: ->
-  #   @
-  #     .Set ->
-  #       level: it.level++
-  #       buildingFinish: 0
-  #     .Then !~>
-  #       it.planet[@_type] = it # avoid refetch planet
-  #       it._CheckAvailability!
+        throw 'Building not available now' if not building.available
 
+        if not planet.buy building.price
+          throw 'Not enougth resources'
 
+        @planet.Set planet.amount
+
+      .Then ~>
+        Queue.MonoSlot do
+          \level_up
+          { planetId: it.id }
+          building.buildingTime
+          { id: @id, name: name }
+
+      .Then ~> @
+
+  LevelUpApply: (params) ->
+    @Set -> it[params.name] = ++it[params.name]
 
   ToJSON: ->
     serie = super!
@@ -56,8 +61,10 @@ buildings |> each -> Building.Field it, \int .Default 0
 
 module.exports = Building
 
+Player = require \./Player
+
 N.bus.on \level_up ->
-  N[it.type]
+  Building
     .Fetch it.id
     .LevelUpApply it
     .Catch console.error

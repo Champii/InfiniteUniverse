@@ -3,32 +3,30 @@ require! {
   \./formulas
 }
 
-class Player
+export class Planet
 
-  (@id, @username) ->
-
-
-class Planet
-
-  (@id, @player, @amount, buildingLevels, researchLevels) ->
+  (planet, player) ->
     @buildings = {}
     @researches = {}
+
+    @amount = planet.amount
+    buildingLevels = planet.buildings.ToJSON!
+    researchLevels = player.researches.ToJSON!
 
     @prodRatio = @_prodRatio!
     buildingLevels
       |> obj-to-pairs
       |> each ~>
         type = if specialBuildings[it.0] => that else Building
-        @buildings[it.0] = new type it.0, it.1, @player, @
+        @buildings[it.0] = new type it.0, it.1, @
 
     researchLevels
       |> obj-to-pairs
-      |> each ~> @researches[it.0] = new Research it.0, it.1, @player, @
+      |> each ~> @researches[it.0] = new Research it.0, it.1, @
 
     @buildings |> Obj.each ~> it._init!
     @researches |> Obj.each ~> it._init!
     @prodRatio = @_prodRatio!
-
 
   _availableEnergy: ->
     @buildings.solarplant.energy - @buildings.metal.consumption - @buildings.crystal.consumption - @buildings.deut.consumption
@@ -57,15 +55,15 @@ class Planet
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
       return false
 
-    @amouont.metal   -= price.metal
-    @amouont.crystal -= price.crystal
-    @amouont.deut    -= price.deut if price.deut
+    @amount.metal   -= price.metal
+    @amount.crystal -= price.crystal
+    @amount.deut    -= price.deut if price.deut
 
     true
 
 class Entity
 
-  (@name, @level, @player, @planet) ->
+  (@name, @level, @planet) ->
     @price = @_price!
 
   _init: ->
@@ -73,7 +71,7 @@ class Entity
     @buildingTime = @_buildingTime!
 
   _buildingTime: ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600
+    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 10tmpVal
 
   _price: -> formulas[@name].price @level
 
@@ -124,29 +122,29 @@ specialBuildings =
   solarplant: SolarPlant
 
 
-player = new Player 1 \toto
+# player = new Player 1 \toto
 
-buildings =
-  metal: 10
-  crystal: 10
-  deut: 1
-  solarplant: 1
-  roboticfactory: 0
-  lab: 0
+# buildings =
+#   metal: 10
+#   crystal: 10
+#   deut: 1
+#   solarplant: 1
+#   roboticfactory: 0
+#   lab: 0
 
-researches =
-  energy: 0
-  combustionDrive: 0
+# researches =
+#   energy: 0
+#   combustionDrive: 0
 
-amounts =
-  metal: 1000
-  crystal: 1000
-  deut: 1000
+# amounts =
+#   metal: 1000
+#   crystal: 1000
+#   deut: 1000
 
-planet = new Planet 1 player, amounts, buildings, researches
+# planet = new Planet 1 player, amounts, buildings, researches
 
-console.log planet
+# console.log planet
 
-setInterval ->
-  planet.update!
-, 1000
+# setInterval ->
+#   planet.update!
+# , 1000

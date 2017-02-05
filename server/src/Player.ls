@@ -24,11 +24,13 @@ module.exports = Player
 require! {
   \./Planet
   \./Research
+  \./Queue
 }
 
 Player
-  ..HasMany Planet, \planets
-  ..HasOne  Research
+  ..HasMany    Planet,   \planets
+  ..HasOne     Research, \researches
+  ..MayHasOne  Queue
 
 Player.Watch \new (player) ->
   Planet
