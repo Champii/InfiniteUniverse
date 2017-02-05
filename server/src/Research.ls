@@ -62,8 +62,8 @@ class Research extends N \research, ResearchRoute, schema: \strict
     delete serie.playerId
     serie
 
-<[ energy combustionDrive ]>
-  |> each -> Research.Field it, \int .Default 0
+<[ energy combustionDrive impulseDrive armor ]>
+  |> each -> Research.Field it, \int .Default 3
 
 module.exports = Research
 
