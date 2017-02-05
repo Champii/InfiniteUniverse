@@ -9,18 +9,12 @@ class Queue extends N \queue QueueRoute, schema: \strict
     @QueueX ...args, 1
 
   @QueueSlot = (...args) ->
-    @QueueX ...args, 4
+    @QueueX ...args, 5
 
   @QueueX = (event, inObj, delay, data, maxSize) ->
-    @_IsActive inObj, maxSize
+    @_IsActive (inObj <<< { event }), maxSize
       .Then (active) ~>
-
-        if active.length
-          maxDate = (maximum-by (.id), active .end)
-          if maxDate
-            delay += maxDate / 1000
-
-        @SetTimeout ({ event, data, active: !active.length } <<< inObj), delay
+        @Push ({ event, data, delay, active: !active.length } <<< inObj), delay
 
   @_IsActive = (inObj, maxSize) ->
     @List inObj
@@ -30,26 +24,51 @@ class Queue extends N \queue QueueRoute, schema: \strict
 
         !it.length
 
-  @SetTimeout = (obj, delay) ->
+  @Push = (obj) ->
     obj.data = JSON.stringify obj.data
 
-    @Create (obj <<< { end: new Date(new Date().getTime! + (delay * 1000)) })
-      .Then (queue) ~>
-        if queue.active
-          setTimeout ~>
-            queue.Delete!
+    @Create obj <<< ({ end: new Date(new Date().getTime! + (obj.delay * 1000))})
+      .Then @~SetTimeout
 
-            N.bus.emit queue.event, JSON.parse queue.data
-            @SetNextTimeout obj
-          , delay * 1000
+  @SetTimeout = (queue) ->
+    if queue.active
+      setTimeout ~>
+        queue.data = JSON.parse queue.data
 
-        queue
+        N.bus.emit queue.event, queue.data
 
-  @SetNextTimeout = (obj) ->
-    @List obj{ event, active: false }
+        if not queue.data.amount || (queue.data.amount - 1) <= 0
+          queue.Delete!
+          @SetNextTimeout queue
+        else
+          queue.data.amount -= 1
+          queue.end = new Date(new Date().getTime! + (queue.delay * 1000))
+
+          queue.data = JSON.stringify queue.data
+          queue
+            .Set data: queue.data, end: queue.end
+            .Then !~>
+              @SetTimeout it
+
+      , queue.delay * 1000
+    queue
+
+  @SetNextTimeout = (queue) ->
+    toList = queue{ event, planetId, playerId }
+    toList.active = false
+    @List toList
+      .Then (.0) >> (.Set active: true)
+      .Then @~SetTimeout
+
+  ToJSON: ->
+    serie = super!
+    data = JSON.parse serie.data
+    res = serie{ active, end } <<< data{ name, amount }
+    res
 
 Queue
   ..Field \active   \bool   .Default true
+  ..Field \delay    \int
   ..Field \end      \date
   ..Field \event    \string
   ..Field \data     \string

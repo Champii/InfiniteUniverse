@@ -20,7 +20,10 @@ Player
   ..Field \username      \string
   ..Field \password      \string
 
-  ..Field \researchQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \research_up
+  ..Field \researchQueue \obj    .Virtual ->
+    it.queues || []
+      |> filter -> it.event is \research_up
+      |> map (.ToJSON!)
 
 module.exports = Player
 

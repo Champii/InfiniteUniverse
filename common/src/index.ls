@@ -6,13 +6,15 @@ require! {
 export class Planet
 
   (planet, player) ->
-    @buildings = {}
+    @buildings  = {}
     @researches = {}
+    @ships      = {}
 
     @amount = planet.amount
     @lastUpdate = new Date planet.lastUpdate
     buildingLevels = planet.buildings.ToJSON!
     researchLevels = player.researches.ToJSON!
+    ships          = planet.ships.ToJSON!
 
     @prodRatio = @_prodRatio!
     buildingLevels
@@ -25,9 +27,15 @@ export class Planet
       |> obj-to-pairs
       |> each ~> @researches[it.0] = new Research it.0, it.1, @
 
-    @buildings |> Obj.each ~> it._init!
+    ships
+      |> obj-to-pairs
+      |> each ~> @ships[it.0] = new Ship it.0, it.1, @
+
+    @buildings  |> Obj.each ~> it._init!
     @researches |> Obj.each ~> it._init!
-    @prodRatio = @_prodRatio!
+    @ships      |> Obj.each ~> it._init!
+
+    @update!
 
   _availableEnergy: ->
     @buildings.solarplant.energy - @buildings.metal.consumption - @buildings.crystal.consumption - @buildings.deut.consumption
@@ -73,7 +81,7 @@ class Entity
     @buildingTime = @_buildingTime!
 
   _buildingTime: ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 1000tmpVal
+    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 100tmpVal
 
   _price: -> formulas[@name].price @level
 
@@ -91,7 +99,15 @@ class Entity
 class Research extends Entity
 
   _buildingTime: ->
-    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 1000
+    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 100
+
+class Ship extends Entity
+
+  _price: ->
+    formulas[@name].price
+
+  _buildingTime: (name) ->
+    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.shipyard.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 1000tmpVal
 
 class Building extends Entity
 
@@ -105,7 +121,6 @@ class Mine extends Building
 
   update: (lastUpdate) ->
     @production = (formulas[@name].production @level) * @planet.prodRatio
-    console.log @production
     @consumption = formulas[@name].consumption @level
     lapsedTime = (new Date - lastUpdate) / 1000
 
@@ -122,31 +137,3 @@ specialBuildings =
   crystal:    Mine
   deut:       Mine
   solarplant: SolarPlant
-
-
-# player = new Player 1 \toto
-
-# buildings =
-#   metal: 10
-#   crystal: 10
-#   deut: 1
-#   solarplant: 1
-#   roboticfactory: 0
-#   lab: 0
-
-# researches =
-#   energy: 0
-#   combustionDrive: 0
-
-# amounts =
-#   metal: 1000
-#   crystal: 1000
-#   deut: 1000
-
-# planet = new Planet 1 player, amounts, buildings, researches
-
-# console.log planet
-
-# setInterval ->
-#   planet.update!
-# , 1000

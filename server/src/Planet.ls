@@ -2,6 +2,7 @@ require! {
   async
   \./AuthRoute
   \./Building
+  \./Ship
   \./Queue
   \../../common/src : Lib
 }
@@ -20,9 +21,7 @@ class Planet extends N \planet PlanetRoute, schema: \strict
       .Fetch @playerId
       .Then ~>
         planet = new Lib.Planet @, it
-        console.log \Update planet.amount
         planet.update!
-        console.log \Update planet.amount
         @Set ({} <<< planet.amount) <<< lastUpdate: new Date
 
   ToJSON: ->
@@ -39,19 +38,30 @@ Planet
   ..Field \position      \string
   ..Field \lastUpdate    \date   .Default new Date .Internal!
 
-  ..Field \metal         \int    .Default 5000     .Internal!
-  ..Field \crystal       \int    .Default 5000     .Internal!
-  ..Field \deut          \int    .Default 5000     .Internal!
+  ..Field \metal         \int    .Default 50000     .Internal!
+  ..Field \crystal       \int    .Default 50000     .Internal!
+  ..Field \deut          \int    .Default 50000     .Internal!
 
   ..Field \amount        \obj    .Virtual -> it{ metal, crystal, deut }
-  ..Field \buildingQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \level_up
+  ..Field \buildingQueue \obj    .Virtual ->
+    it.queues || []
+      |> filter -> it.event is \level_up
+      |> map (.ToJSON!)
 
-  ..HasOne  Building, \buildings
-  ..MayHasMany Queue, \queues
+  ..Field \shipQueue     \obj    .Virtual ->
+    it.queues || []
+      |> filter -> it.event is \ship_buy
+      |> map (.ToJSON!)
+
+  ..HasOne     Building, \buildings
+  ..HasOne     Ship,     \ships
+  ..MayHasMany Queue,    \queues
 
 Planet.Watch \new ->
   Building
     .Create do
+      planetId: it.id
+    .Then -> Ship.Create do
       planetId: it.id
     .Catch console.error
 

@@ -51,12 +51,11 @@ class Building extends N \building, BuildingRoute, maxDepth: 2
     delete serie.player
     serie
 
-
 Building
 
-buildings = <[ metal crystal deut solarplant roboticfactory lab ]>
+buildings = <[ metal crystal deut solarplant roboticfactory lab shipyard ]>
 
-buildings |> each -> Building.Field it, \int .Default 20
+buildings |> each -> Building.Field it, \int .Default 3
 
 module.exports = Building
 
