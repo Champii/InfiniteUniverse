@@ -51,7 +51,6 @@ formulas =
 # Researches
 
   energy:
-    isResearch: true #fixme
     price: (level) ->
       metal:   0
       crystal: 800 * (2 ^ level)
@@ -60,7 +59,6 @@ formulas =
       lab: 1
 
   combustionDrive:
-    isResearch: true #fixme
     price: (level) ->
       metal:   400 * (2 ^ level)
       crystal: 0
@@ -69,6 +67,64 @@ formulas =
       lab: 1
     researches:
       energy: 1
+
+  armor:
+    price: (level) ->
+      metal:   1000 * (2 ^ level)
+      crystal: 0
+      deut:    0
+    buildings:
+      lab: 2
+
+  impulseDrive:
+    price: (level) ->
+      metal:   2000 * (2 ^ level)
+      crystal: 4000 * (2 ^ level)
+      deut:    600  * (2 ^ level)
+    buildings:
+      lab: 2
+    researches:
+      energy: 1
+
+# Ships
+
+  smallFighter:
+    price:
+      metal:   3000
+      crystal: 1000
+    buildings:
+      shipyard: 1
+    researches:
+      combustionDrive: 1
+
+  largeFighter:
+    price:
+      metal:   6000
+      crystal: 4000
+    buildings:
+      shipyard: 3
+    researches:
+      combustionDrive: 1
+      armor: 2
+      impulseDrive:2
+
+  smallTransporter:
+    price:
+      metal:   2000
+      crystal: 2000
+    buildings:
+      shipyard: 2
+    researches:
+      combustionDrive: 2
+
+  largeTransporter:
+    price:
+      metal:   6000
+      crystal: 6000
+    buildings:
+      shipyard: 4
+    researches:
+      combustionDrive: 6
 
 if window?
   window['formulas'] = formulas
