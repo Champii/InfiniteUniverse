@@ -1,3 +1,6 @@
+if not module?exports?
+  module = exports: window
+
 module.exports =
   metal:
     price: (level) ->

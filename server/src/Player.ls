@@ -30,7 +30,7 @@ require! {
 Player
   ..HasMany    Planet,   \planets
   ..HasOne     Research, \researches
-  ..MayHasOne  Queue
+  ..HasOne     Queue
 
 Player.Watch \new (player) ->
   Planet

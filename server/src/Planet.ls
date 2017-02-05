@@ -29,8 +29,8 @@ Planet
   ..Field \deut          \int    .Default 5000 .Internal!
 
   ..Field \amount        \obj    .Virtual -> it{ metal, crystal, deut }
-  ..Field \buildingQueue \obj    .Virtual -> it.queues |> filter -> it.event is \level_up
-  ..Field \researchQueue \obj    .Virtual -> it.queues |> filter -> it.event is \research_up
+  ..Field \buildingQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \level_up
+  ..Field \researchQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \research_up
 
   ..HasOne  Building, \buildings
   ..HasMany Queue,    \queues

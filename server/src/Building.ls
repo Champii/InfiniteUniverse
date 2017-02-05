@@ -13,7 +13,6 @@ class BuildingRoute extends AuthRoute
 class Building extends N \building, BuildingRoute, maxDepth: 2
 
   LevelUp: (name, user) ->
-    # console.log \LEVELUP @
     planet = {}
     building = {}
 

@@ -30,8 +30,6 @@ class Queue extends N \queue QueueRoute, schema: \strict
 
         !it.length
 
-
-
   @SetTimeout = (obj, delay) ->
     obj.data = JSON.stringify obj.data
 
