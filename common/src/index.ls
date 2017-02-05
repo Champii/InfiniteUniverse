@@ -71,7 +71,7 @@ class Entity
     @buildingTime = @_buildingTime!
 
   _buildingTime: ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 10tmpVal
+    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 100tmpVal
 
   _price: -> formulas[@name].price @level
 
@@ -89,7 +89,7 @@ class Entity
 class Research extends Entity
 
   _buildingTime: ->
-    (@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1)) * 3600
+    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 100
 
 class Building extends Entity
 

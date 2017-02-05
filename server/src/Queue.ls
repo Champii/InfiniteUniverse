@@ -49,8 +49,6 @@ class Queue extends N \queue QueueRoute, schema: \strict
     @List obj{ event, active: false }
 
 Queue
-  ..Field \planetId \int    .Optional!
-  ..Field \playerId \int    .Optional!
   ..Field \active   \bool   .Default true
   ..Field \end      \date
   ..Field \event    \string

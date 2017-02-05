@@ -34,12 +34,12 @@ class Research extends N \research, ResearchRoute, schema: \strict
         if not planet.buy research.price
           throw 'Not enougth resources'
 
-        @planet.Set planet.amount
+        it.Set planet.amount
 
       .Then ~>
         Queue.MonoSlot do
-          \level_up
-          { planetId: it.id }
+          \research_up
+          { playerId: @player.id }
           research.buildingTime
           { id: @id, name: name }
 

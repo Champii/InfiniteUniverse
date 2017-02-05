@@ -30,11 +30,9 @@ Planet
 
   ..Field \amount        \obj    .Virtual -> it{ metal, crystal, deut }
   ..Field \buildingQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \level_up
-  ..Field \researchQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \research_up
 
   ..HasOne  Building, \buildings
-  ..HasMany Queue,    \queues
-
+  ..MayHasMany Queue, \queues
 
 Planet.Watch \new ->
   Building

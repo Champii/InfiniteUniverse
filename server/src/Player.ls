@@ -13,11 +13,14 @@ class Player extends N.AccountResource \player PlayerRoute, schema: \strict
           obj = it.ToJSON!
           delete obj.amount
           obj
+    delete serie.queues
     serie
 
 Player
-  ..Field \username \string
-  ..Field \password \string
+  ..Field \username      \string
+  ..Field \password      \string
+
+  ..Field \researchQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \research_up
 
 module.exports = Player
 
@@ -30,7 +33,7 @@ require! {
 Player
   ..HasMany    Planet,   \planets
   ..HasOne     Research, \researches
-  ..HasOne     Queue
+  ..MayHasMany Queue,    \queues
 
 Player.Watch \new (player) ->
   Planet
