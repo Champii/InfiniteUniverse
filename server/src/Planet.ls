@@ -10,7 +10,6 @@ class PlanetRoute extends AuthRoute
     super!
 
     @Get \/:id @deepAuth, (.instance)
-    # @Get \/:id  ~> @resource.Fetch +it.params.id
 
 class Planet extends N \planet PlanetRoute, schema: \strict
 
@@ -22,6 +21,13 @@ class Planet extends N \planet PlanetRoute, schema: \strict
 Planet
   ..Field \name     \string .Default \Planet
   ..Field \position \string
+
+  ..Field \metal    \int    .Default 0 .Internal!
+  ..Field \crystal  \int    .Default 0 .Internal!
+  ..Field \deut     \int    .Default 0 .Internal!
+
+  ..Field \amount   \obj    .Virtual -> it{ metal, crystal, deut }
+
   ..HasOne Building, \buildings
 
 

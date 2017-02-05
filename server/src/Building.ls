@@ -42,6 +42,7 @@ class Building extends N \building, BuildingRoute
   ToJSON: ->
     serie = super!
     delete serie.id
+    delete serie.planetId
     delete serie.planet
     delete serie.player
     serie

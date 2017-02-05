@@ -56,6 +56,11 @@ class Research extends N \research, ResearchRoute, schema: \strict
   #       instance
 
   # _Price: -> formulas[@name].price @level
+  ToJSON: ->
+    serie = super!
+    delete serie.id
+    delete serie.playerId
+    serie
 
 <[ energy combustionDrive ]>
   |> each -> Research.Field it, \int .Default 0

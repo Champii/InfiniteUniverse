@@ -5,6 +5,16 @@ class PlayerRoute extends N.Route
 
 class Player extends N.AccountResource \player PlayerRoute, schema: \strict
 
+  ToJSON: ->
+    serie = super!
+    if @planets?
+      serie.planets = @planets
+        |> map ->
+          obj = it.ToJSON!
+          delete obj.amount
+          obj
+    serie
+
 Player
   ..Field \username \string
   ..Field \password \string
