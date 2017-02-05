@@ -10,6 +10,7 @@ export class Planet
     @researches = {}
 
     @amount = planet.amount
+    @lastUpdate = new Date planet.lastUpdate
     buildingLevels = planet.buildings.ToJSON!
     researchLevels = player.researches.ToJSON!
 
@@ -47,9 +48,10 @@ export class Planet
 
   update: ->
     @prodRatio = @_prodRatio!
-    @buildings.metal.update!
-    @buildings.crystal.update!
-    @buildings.deut.update!
+    @buildings.metal.update @lastUpdate
+    @buildings.crystal.update @lastUpdate
+    @buildings.deut.update @lastUpdate
+    @lastUpdate = new Date
 
   buy: (price) ->
     if @amount.metal < price.metal || @amount.crystal < price.crystal || @amount.deut < (price.deut || 0)
@@ -71,7 +73,7 @@ class Entity
     @buildingTime = @_buildingTime!
 
   _buildingTime: ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 100tmpVal
+    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 1000tmpVal
 
   _price: -> formulas[@name].price @level
 
@@ -89,7 +91,7 @@ class Entity
 class Research extends Entity
 
   _buildingTime: ->
-    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 100
+    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 1000
 
 class Building extends Entity
 
@@ -99,15 +101,15 @@ class Mine extends Building
     super ...
     @production = (formulas[@name].production @level) * @planet.prodRatio
     @consumption = formulas[@name].consumption @level
-    @lastUpdate = new Date
 
-  update: ->
+
+  update: (lastUpdate) ->
     @production = (formulas[@name].production @level) * @planet.prodRatio
+    console.log @production
     @consumption = formulas[@name].consumption @level
-    lapsedTime = (new Date - @lastUpdate) / 1000
+    lapsedTime = (new Date - lastUpdate) / 1000
 
     @planet.amount[@name] += ((@production / 3600) * lapsedTime)
-    @lastUpdate = new Date
 
 class SolarPlant extends Building
 

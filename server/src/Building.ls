@@ -56,7 +56,7 @@ Building
 
 buildings = <[ metal crystal deut solarplant roboticfactory lab ]>
 
-buildings |> each -> Building.Field it, \int .Default 0
+buildings |> each -> Building.Field it, \int .Default 20
 
 module.exports = Building
 
