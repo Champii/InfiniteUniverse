@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
+    "prelude-ls": "^1.1.2"
   },
   "scripts": {
     "compile": "lsc -c -o dist src",

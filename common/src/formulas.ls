@@ -1,4 +1,4 @@
-formulas =
+module.exports =
   metal:
     price: (level) ->
       metal:   60 * (1.5 ^ level)
@@ -19,6 +19,13 @@ formulas =
       crystal: 75 * (1.5 ^ level)
     production: (level) -> 10 * level * (1.1 ^ level) * (-0.002 * 250tempPlanet + 1.28)
     consumption: (level) -> 20 * level * (1.1 ^ level)
+
+  solarplant:
+    price: (level) ->
+      metal:   75 * (1.5 ^ level)
+      crystal: 30 * (1.5 ^ level)
+
+    production: (level) -> 20 * level * (1.1 ^ level)
 
   roboticfactory:
     price: (level) ->
