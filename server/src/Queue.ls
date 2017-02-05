@@ -20,7 +20,7 @@ class Queue extends N \queue QueueRoute, schema: \strict
       .Then (active) ~>
         @SetTimeout ({ event, data, active } <<< inObj), delay
 
-  @_IsActive: (inObj, maxSize)->
+  @_IsActive = (inObj, maxSize) ->
     @List idObj
       .Then ~>
         if it.length > maxSize

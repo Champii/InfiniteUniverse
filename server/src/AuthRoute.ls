@@ -1,8 +1,8 @@
 class AuthRoute extends N.Route
 
   Config: ->
-    @All \/:id* ~> it.SetInstance @resource.Fetch it.params.id
+    @All \/:id* ~> it.SetInstance @resource.Fetch +it.params.id
 
-    @deepAuth = @IsOwnDeep (._instance.player.id)
+    @deepAuth = @IsOwnDeep (._instance.playerId)
 
 module.exports = AuthRoute
