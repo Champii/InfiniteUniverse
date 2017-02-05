@@ -1,0 +1,8 @@
+<div>
+  <div class="nb-planets"><span>{{ playerService.player.planets.length }}</span> Planets</div>
+  <div class="planet-item" *ngFor="let planet of playerService.player.planets">
+    <img [src]="planetService.getIcon()" alt="" (click)="goTo(planet.id)">
+    <div>{{ planet.name }}</div>
+    <div>{{ planet.position }}</div>
+  </div>
+</div>

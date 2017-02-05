@@ -1,0 +1,69 @@
+:host {
+  .building {
+    /deep/ {
+      .ui-widget-header {
+        text-transform: capitalize;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 34px;
+        display: block;
+        white-space: nowrap;
+      }
+      .ui-panel {
+        &:hover {
+          border: 1px solid #55a748;
+        }
+        position: relative;
+        .building-icon {
+          height: 100px;
+          width: 100px;
+          padding: 0px;
+          position: relative;
+          margin: auto;
+          div {
+            width: 100%;
+            height: 100%;
+            background: url('/assets/img/miners/miners.png') 0 0 no-repeat;
+            &.metal {
+              background-position: -100px 0;
+            }
+            &.crystal {
+              background-position: -400px 0;
+              &.disabled {
+                background-position: -400px -100px;
+              }
+            }
+            &.deut {
+              background-position: -300px 0;
+            }
+          }
+        }
+        .building-lvl {
+          .fa {
+            &.enabled {
+              color: #55a748;
+            }
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+    &.disabled {
+      /deep/ {
+        .ui-panel {
+          &:hover {
+            border: 1px solid #323232;
+          }
+          .building-lvl {
+            .fa {
+              color: #374635;
+            }
+          }
+        }
+        .building-icon {
+          filter: brightness(30%);
+        }
+      }
+    }
+  }
+}

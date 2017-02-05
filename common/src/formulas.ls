@@ -1,7 +1,4 @@
-if not module?exports?
-  module = exports: window
-
-module.exports =
+formulas =
   metal:
     price: (level) ->
       metal:   60 * (1.5 ^ level)
@@ -72,3 +69,8 @@ module.exports =
       lab: 1
     researches:
       energy: 1
+
+if window?
+  window['formulas'] = formulas
+else
+  module.exports = formulas

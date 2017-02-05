@@ -40,6 +40,9 @@ Player.Watch \new (player) ->
     .Create do
       position: \test
       playerId: player.id
+    .Then -> Planet.Create do
+      position: \colony
+      playerId: player.id
     .Then -> Research.Create do
       playerId: player.id
     .Catch console.error

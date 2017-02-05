@@ -1,8 +1,0 @@
-<div class="resources-wrapper">
-  <div class="row around-xs">
-    <div class="resource-item col-xs-3" *ngFor="let resource of planetService.getAmount()">
-      <i [class]="setIcon(resource.name)" aria-hidden="true" pTooltip="{{ resource.name }}"></i>
-      <div>{{ resource.quantity }}</div>
-    </div>
-  </div>
-</div>

@@ -1,0 +1,18 @@
+.header {
+  padding: 10px 0px;
+}
+
+.view-wrapper {
+  height: 100%;
+  .game-wrapper {
+    height: 100%;
+    margin-top: 5px;
+  }
+  .content-wrapper {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+    color: #a6b8cb;
+  }
+}

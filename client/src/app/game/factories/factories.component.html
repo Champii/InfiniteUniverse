@@ -1,0 +1,5 @@
+<div>
+  <app-overview header="Resources" img="resources-overview.jpg" [detail]="planetService.detail"></app-overview>
+  <app-buildings header="Mines" [buildings]="planetService.planet.resources.mines"></app-buildings>
+  <app-buildings header="Generators" [buildings]="planetService.planet.resources.generators"></app-buildings>
+</div>

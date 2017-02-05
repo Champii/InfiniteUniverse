@@ -1,0 +1,8 @@
+<div class="resources-wrapper">
+  <div class="row around-xs">
+    <div class="resource-item col-xs-3" *ngFor="let mine of planetService.planet.resources.mines">
+      <i [class]="setIcon(mine.slug)" aria-hidden="true" pTooltip="{{ mine.name }}"></i>
+      <div>{{ mine.getAmount() }}</div>
+    </div>
+  </div>
+</div>

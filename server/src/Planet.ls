@@ -39,9 +39,9 @@ Planet
   ..Field \position      \string
   ..Field \lastUpdate    \date   .Default new Date .Internal!
 
-  ..Field \metal         \int    .Default 5000     .Internal!
-  ..Field \crystal       \int    .Default 5000     .Internal!
-  ..Field \deut          \int    .Default 5000     .Internal!
+  ..Field \metal         \int    .Default 3750000     .Internal!
+  ..Field \crystal       \int    .Default 2750000     .Internal!
+  ..Field \deut          \int    .Default 75000     .Internal!
 
   ..Field \amount        \obj    .Virtual -> it{ metal, crystal, deut }
   ..Field \buildingQueue \obj    .Virtual -> it.queues || [] |> filter -> it.event is \level_up

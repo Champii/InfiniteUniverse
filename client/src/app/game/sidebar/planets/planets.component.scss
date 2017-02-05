@@ -1,0 +1,12 @@
+:host {
+  text-align: center;
+  .nb-planets {
+    margin-bottom: 10px;
+  }
+  .planet-item {
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+}
