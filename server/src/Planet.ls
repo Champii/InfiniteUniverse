@@ -1,10 +1,5 @@
 require! {
-  async
   \./AuthRoute
-  \./Building
-  \./Ship
-  \./Queue
-  \../../common/src : Lib
 }
 
 class PlanetRoute extends AuthRoute
@@ -32,17 +27,33 @@ class Planet extends N \planet PlanetRoute, schema: \strict
     serie.amount = Obj.map Math.floor, serie.amount
 
     serie
+module.exports = Planet
+
+require! {
+  async
+  \./AuthRoute
+  \./Building
+  \./Ship
+  \./Queue
+  \../../common/src : Lib
+}
+
 
 Planet
   ..Field \name          \string .Default \Planet
-  ..Field \position      \string
   ..Field \lastUpdate    \date   .Default new Date .Internal!
 
-  ..Field \metal         \int    .Default 3750000     .Internal!
-  ..Field \crystal       \int    .Default 2750000     .Internal!
-  ..Field \deut          \int    .Default 75000     .Internal!
+  ..Field \metal         \int    .Default 5000     .Internal!
+  ..Field \crystal       \int    .Default 5000     .Internal!
+  ..Field \deut          \int    .Default 5000     .Internal!
+
+  ..Field \gal           \int    .Internal!
+  ..Field \sol           \int    .Internal!
+  ..Field \pla           \int    .Internal!
 
   ..Field \amount        \obj    .Virtual -> it{ metal, crystal, deut }
+  ..Field \pos           \obj    .Virtual -> it{ gal, sol, pla }
+
   ..Field \buildingQueue \obj    .Virtual ->
     it.queues || []
       |> filter -> it.event is \level_up
@@ -65,10 +76,10 @@ Planet.Watch \new ->
       planetId: it.id
     .Catch console.error
 
-Building.HasOneThrough \./Player, Planet
 
-module.exports = Planet
 
 require! {
   \./Player
 }
+
+# Building.HasOneThrough Player, Planet

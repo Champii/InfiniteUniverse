@@ -29,7 +29,8 @@ class Building extends N \building, BuildingRoute, maxDepth: 2
         if not planet.buy building.price
           throw 'Not enougth resources'
 
-        @planet.Set planet.amount
+        @planet.Set (planet.amount <<< lastUpdate: planet.lastUpdate)
+
 
       .Then ~>
         Queue.MonoSlot do
@@ -55,7 +56,7 @@ Building
 
 buildings = <[ metal crystal deut solarplant roboticfactory lab shipyard ]>
 
-buildings |> each -> Building.Field it, \int .Default 3
+buildings |> each -> Building.Field it, \int .Default 20
 
 module.exports = Building
 

@@ -10,11 +10,13 @@ export class Planet
     @researches = {}
     @ships      = {}
 
-    @amount = planet.amount
-    @lastUpdate = new Date planet.lastUpdate
+    @amount        = planet.amount
+    @lastUpdate    = new Date planet.lastUpdate
     buildingLevels = planet.buildings.ToJSON!
     researchLevels = player.researches.ToJSON!
     ships          = planet.ships.ToJSON!
+
+    @pos           = planet.pos
 
     @prodRatio = @_prodRatio!
     buildingLevels
@@ -71,6 +73,9 @@ export class Planet
 
     true
 
+  fleet: (order, destPlanet) ->
+    new Fleet order, destPlanet, @
+
 class Entity
 
   (@name, @level, @planet) ->
@@ -81,7 +86,7 @@ class Entity
     @buildingTime = @_buildingTime!
 
   _buildingTime: ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 100tmpVal
+    Math.floor ((@price.metal + @price.crystal) / (2500 * (1 + @planet.buildings.roboticfactory.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600
 
   _price: -> formulas[@name].price @level
 
@@ -99,15 +104,24 @@ class Entity
 class Research extends Entity
 
   _buildingTime: ->
-    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600 / 100
+    ((@price.metal + @price.crystal) / (1000 * (@planet.buildings.lab.level + 1))) * 3600
 
 class Ship extends Entity
+
+  ->
+    super ...
+    @quantity = @level
+    delete @level
+    @specs = @_specs!
 
   _price: ->
     formulas[@name].price
 
-  _buildingTime: (name) ->
-    Math.floor ((@price.metal * @price.crystal) / (25000 * (1 + @planet.buildings.shipyard.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600 / 1000tmpVal
+  _buildingTime: ->
+    Math.floor ((@price.metal + @price.crystal) / (2500 * (1 + @planet.buildings.shipyard.level) * (2 ^ 0naniteLevel) * 1universeSpeed)) * 3600
+
+  _specs: ->
+    formulas[@name].specs
 
 class Building extends Entity
 
@@ -117,7 +131,6 @@ class Mine extends Building
     super ...
     @production = (formulas[@name].production @level) * @planet.prodRatio
     @consumption = formulas[@name].consumption @level
-
 
   update: (lastUpdate) ->
     @production = (formulas[@name].production @level) * @planet.prodRatio
@@ -131,6 +144,82 @@ class SolarPlant extends Building
   ->
     super ...
     @energy = formulas.solarplant.production @level
+
+class Fleet
+
+  (@order, @destPlanet, @planet) ->
+    @ <<< @order{ ships, dest, amount, mission }
+
+  fly: ->
+
+    if @dest{gal, sol, pla} === @planet.pos{gal, sol, pla}
+      throw 'Cannot fly to your actual position'
+
+    enoughtShips = @ships
+      |> obj-to-pairs
+      |> all ~> @planet.ships[it.0].quantity >= it.1
+
+    if not enoughtShips
+      throw 'Not enought ships'
+
+    capacity = @ships
+      |> obj-to-pairs
+      |> map ~> @planet.ships[it.0].specs.capacity * it.1
+      |> sum
+
+    if capacity < sum values @amount
+      throw 'Not enought storage capacity'
+
+    @ships
+      |> obj-to-pairs
+      |> each ~> @planet.ships[it.0].quantity -= it.1
+
+    speed = @ships
+      |> keys
+      |> minimum-by (-> formulas[it].specs.speed)
+      |> -> formulas[it].specs.speed
+
+    distance = @_calcDistance!
+
+    @time = @_calcTime speed, distance
+
+    @end = new Date!getTime! + (@time * 1000)
+
+    @prepareMission!
+
+  prepareMission: ->
+    switch @mission
+      | \transport => @prepareTransport!
+
+  applyMission: (destPlanet) ->
+    switch @mission
+      | \transport => @doTransport destPlanet
+
+  prepareTransport: ->
+    throw 'Not enought resources' if not @planet.buy @amount
+
+  doTransport: (destPlanet) ->
+    destPlanet.amount.metal   += @amount.metal
+    destPlanet.amount.crystal += @amount.crystal
+    destPlanet.amount.deut    += @amount.deut
+
+  flyReturn: ->
+    @ships
+      |> obj-to-pairs
+      |> each ~> @planet.ships[it.0].quantity += it.1
+
+
+  _calcDistance: ->
+    if @dest.gal isnt @planet.pos.gal
+      20000 * Math.abs(@dest.gal - @planet.pos.gal)
+    else if @dest.sol isnt @planet.pos.sol
+      2700 + (95 * Math.abs(@dest.sol - @planet.pos.sol))
+    else
+      1000 + (5 * Math.abs(@dest.pla - @planet.pos.pla))
+
+  _calcTime: (speed, distance) ->
+    10 + (3500 * Math.sqrt((10 * distance) / speed))
+    5
 
 specialBuildings =
   metal:      Mine

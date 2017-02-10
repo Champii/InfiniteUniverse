@@ -11,10 +11,13 @@ class Queue extends N \queue QueueRoute, schema: \strict
   @QueueSlot = (...args) ->
     @QueueX ...args, 5
 
-  @QueueX = (event, inObj, delay, data, maxSize) ->
-    @_IsActive (inObj <<< { event }), maxSize
-      .Then (active) ~>
-        @Push ({ event, data, delay, active: !active.length } <<< inObj), delay
+  @QueueX = (event, inObj, delay, data, maxSize, isActive) ->
+    if isActive?
+      @Push ({ event, data, delay, active: isActive } <<< inObj), delay
+    else
+      @_IsActive (inObj <<< { event }), maxSize
+        .Then (active) ~>
+          @Push ({ event, data, delay, active: !active.length } <<< inObj), delay
 
   @_IsActive = (inObj, maxSize) ->
     @List inObj
@@ -37,11 +40,11 @@ class Queue extends N \queue QueueRoute, schema: \strict
 
         N.bus.emit queue.event, queue.data
 
-        if not queue.data.amount || (queue.data.amount - 1) <= 0
+        if not queue.data.quantity || (queue.data.quantity - 1) <= 0
           queue.Delete!
           @SetNextTimeout queue
         else
-          queue.data.amount -= 1
+          queue.data.quantity -= 1
           queue.end = new Date(new Date().getTime! + (queue.delay * 1000))
 
           queue.data = JSON.stringify queue.data

@@ -25,6 +25,14 @@ Player
       |> filter -> it.event is \research_up
       |> map (.ToJSON!)
 
+  ..Field \fleetQueue \obj    .Virtual ->
+    it.queues || []
+      |> filter -> it.event in <[ fly fly_return ]>
+      |> map ->
+        res = it.ToJSON! <<< JSON.parse it.data
+        delete res.active
+        res
+
 module.exports = Player
 
 require! {
@@ -41,10 +49,14 @@ Player
 Player.Watch \new (player) ->
   Planet
     .Create do
-      position: \test
+      gal: 0
+      sol: 0
+      pla: 0
       playerId: player.id
     .Then -> Planet.Create do
-      position: \colony
+      gal: 0
+      sol: 0
+      pla: 1
       playerId: player.id
     .Then -> Research.Create do
       playerId: player.id

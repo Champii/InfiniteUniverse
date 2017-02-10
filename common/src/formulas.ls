@@ -92,6 +92,13 @@ formulas =
     price:
       metal:   3000
       crystal: 1000
+    specs:
+      integrity:   4000
+      shield:      10
+      weapon:      50
+      capacity:    50
+      speed:       12500
+      consumption: 20
     buildings:
       shipyard: 1
     researches:
@@ -101,6 +108,13 @@ formulas =
     price:
       metal:   6000
       crystal: 4000
+    specs:
+      integrity:   10000
+      shield:      25
+      weapon:      150
+      capacity:    100
+      speed:       10000
+      consumption: 75
     buildings:
       shipyard: 3
     researches:
@@ -112,6 +126,13 @@ formulas =
     price:
       metal:   2000
       crystal: 2000
+    specs:
+      integrity:   4000
+      shield:      10
+      weapon:      5
+      capacity:    5000
+      speed:       5000
+      consumption: 10
     buildings:
       shipyard: 2
     researches:
@@ -121,6 +142,13 @@ formulas =
     price:
       metal:   6000
       crystal: 6000
+    specs:
+      integrity:   12000
+      shield:      25
+      weapon:      5
+      capacity:    25000
+      speed:       7500
+      consumption: 50
     buildings:
       shipyard: 4
     researches:

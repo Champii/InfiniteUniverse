@@ -34,7 +34,7 @@ class Research extends N \research, ResearchRoute, schema: \strict
         if not planet.buy research.price
           throw 'Not enougth resources'
 
-        it.Set planet.amount
+        @planet.Set (planet.amount <<< lastUpdate: planet.lastUpdate)
 
       .Then ~>
         Queue.MonoSlot do
